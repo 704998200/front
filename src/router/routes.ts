@@ -9,10 +9,11 @@ const routes: RouteRecordRaw[] = [
     component: () => import("pages/Login.vue"),
   },
   {
-    path: "/main",
-    component: () => import("pages/Login.vue"),
+    path: "/user",
+    component: () => import("pages/User.vue"),
     meta: {
       requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+      role:"user",
     },
   },
   {
@@ -26,6 +27,9 @@ router.beforeEach((to, from, next) => {
     // 判断该路由是否需要登录权限
     if (LocalStorage.getItem("token") != "") {
       // 通过vuex state获取当前的token是否存在
+      if (to.meta.role){
+        if (LocalStorage.getItem("token") != "")
+      }
       next();
     } else {
       next({

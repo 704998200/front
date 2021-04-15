@@ -59,9 +59,10 @@
 </style>
 
 <script>
-import { useQuasar } from "quasar";
-import { ref } from "vue";
-import { api } from "boot/axios";
+import { useQuasar } from 'quasar';
+import { ref } from 'vue';
+import { api } from '.boot/axios';
+import { useRoute, useRouter } from 'vue-router'
 
 export default {
   setup() {
@@ -69,35 +70,36 @@ export default {
     const username = ref(null);
     const password = ref(null);
     const isPwd = ref(true);
+    const route = useRoute();
+    const router = useRouter();
 
     return {
       username,
       password,
       isPwd,
-
+      route,
+      router,
       onSubmit() {
         $q.notify({
-          color: "green-4",
-          textColor: "white",
-          icon: "cloud_done",
-          message: "Submitted",
+          color: 'green-4',
+          textColor: 'white',
+          icon: 'cloud_done',
+          message: 'Submitted',
         }),
-          api
-            .post("/user/login", {
-              username,
-              password,
+          api.post('/user/login', {
+
             })
             .then((successResponse) => {
-              this.responseResult = JSON.stringify(successResponse.data);
+              const responseResult = JSON.stringify(successResponse.data);
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
               if (successResponse.data.code === 200) {
-                this.$router.replace({ path: "/index" });
-                alert("登陆成功!");
+                void router.replace({ path: '/index' });
+                alert('登陆成功!');
               }
             })
             .catch((failResponse) => {
-              path: "/user/login", alert("登录失败！");
+              path: '/user/login', alert('登录失败！');
             });
-
         // onRegist() {
         //
         // }

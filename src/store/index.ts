@@ -1,10 +1,9 @@
 import { createApp } from "vue";
 import { createStore } from "vuex";
-import App from "../App.vue";
 
 // 创建 store 容器实例.
 
-const store = createStore({
+export const store = createStore({
   // state() {
   //   return {
   //     count: 0,
@@ -18,13 +17,16 @@ const store = createStore({
   },
   mutations: {
     set_token(state, token) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       state.token = token;
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       localStorage.token = token;
+    },
+    del_token(state) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      state.token = null;
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      localStorage.token = null;
     },
   },
 });
-
-const app = createApp(App);
-
-// 通过 use 注册插件
-app.use(store);
