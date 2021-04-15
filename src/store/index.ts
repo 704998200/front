@@ -1,9 +1,8 @@
-import { createApp } from "vue";
 import { createStore } from "vuex";
 
 // 创建 store 容器实例.
 
-export const store = createStore({
+const store = createStore({
   // state() {
   //   return {
   //     count: 0,
@@ -30,3 +29,4 @@ export const store = createStore({
     },
   },
 });
+export default store;

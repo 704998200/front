@@ -16,7 +16,7 @@ module.exports = configure(function (ctx) {
     supportTS: {
       tsCheckerConfig: {
         eslint: {
-          enabled: true,
+          enabled: false,
           files: "./src/**/*.{ts,tsx,js,jsx,vue}",
         },
       },
@@ -28,11 +28,13 @@ module.exports = configure(function (ctx) {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli/boot-files
-    boot: ["i18n", "axios"],
+    boot: ["i18n", "axios", "mock"],
 
     // https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
     css: ["app.scss"],
-
+    env: {
+      BASE_API: process.env.BASE_API
+    },
     // https://github.com/quasarframework/quasar/tree/dev/extras
     extras: [
       // 'ionicons-v4',
@@ -78,7 +80,8 @@ module.exports = configure(function (ctx) {
     devServer: {
       https: false,
       port: 8080,
-      open: true, // opens browser window automatically
+      open: false, // opens browser window automatically
+      before: require("./mock/mock-server.js"),
     },
 
     // https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-framework
