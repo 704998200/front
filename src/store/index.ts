@@ -13,7 +13,7 @@ export const store = createStore({
   state: {
     count: 0,
     username: "",
-    token: null,
+    token: "",
   },
   mutations: {
     set_token(state, token) {
@@ -24,9 +24,9 @@ export const store = createStore({
     },
     del_token(state) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      state.token = null;
+      state.token = "";
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      localStorage.token = null;
+      localStorage.token = "";
     },
   },
 });

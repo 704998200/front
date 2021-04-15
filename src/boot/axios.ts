@@ -1,9 +1,11 @@
 
-import axios from "axios";
+import axios from 'axios';
 import { boot } from 'quasar/wrappers'
-
-const api = axios.create({ baseURL: "http://localhost:8000/" });
-
+import {store} from 'src/store';
+import routes from "src/router/routes";
+import {createRouter, createWebHashHistory} from "vue-router";
+const api = axios.create({ baseURL: 'http://localhost:8000/' });
+const router = createRouter({ history: createWebHashHistory(), routes });
 
 export default boot(({ app }) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api
@@ -21,6 +23,7 @@ export default boot(({ app }) => {
 api.interceptors.request.use(
   config => {
     if (store.state.token) {  // 判断是否存在token，如果存在的话，则每个http header都加上token
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       config.headers.Authorization = `token ${store.state.token}`;
     }
     return config;
@@ -35,18 +38,22 @@ api.interceptors.response.use(
     return response;
   },
   error => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     if (error.response) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       switch (error.response.status) {
         case 401:
           // 返回 401 清除token信息并跳转到登录页面
-          store.commit(types.LOGOUT);
-          router.replace({
-            path: 'login',
-            query: {redirect: router.currentRoute.fullPath}
+          store.commit('del_token',store.state);
+          void router.replace({
+            path: '/login',
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            query: {}
           })
       }
     }
-    return Promise.reject(error.response.data)   // 返回接口返回的错误信息
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    return Promise.reject(error.response)   // 返回接口返回的错误信息
   });
 
 export { axios, api };
