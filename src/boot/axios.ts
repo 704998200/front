@@ -1,9 +1,9 @@
-import axios from "axios";
-import { boot } from "quasar/wrappers";
-import store from "src/store";
-import routes from "src/router/routes";
-import { createRouter, createWebHashHistory } from "vue-router";
-const api = axios.create({ baseURL: "http://localhost:8000/" });
+import axios from 'axios';
+import { boot } from 'quasar/wrappers';
+import store from 'src/store';
+import routes from 'src/router/routes';
+import { createRouter, createWebHashHistory } from 'vue-router';
+const api = axios.create({ baseURL: 'http://localhost:8000/' });
 const router = createRouter({ history: createWebHashHistory(), routes });
 
 export default boot(({ app }) => {
@@ -43,9 +43,9 @@ api.interceptors.response.use(
       switch (error.response.status) {
         case 401:
           // 返回 401 清除token信息并跳转到登录页面
-          store.commit("del_token", store.state);
+          store.commit('del_token', store.state);
           void router.replace({
-            path: "/login",
+            path: '/login',
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             query: {},
           });

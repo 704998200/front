@@ -8,7 +8,7 @@
 
 /* eslint-env node */
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { configure } = require("quasar/wrappers");
+const { configure } = require('quasar/wrappers');
 
 module.exports = configure(function (ctx) {
   return {
@@ -17,7 +17,7 @@ module.exports = configure(function (ctx) {
       tsCheckerConfig: {
         eslint: {
           enabled: false,
-          files: "./src/**/*.{ts,tsx,js,jsx,vue}",
+          files: './src/**/*.{ts,tsx,js,jsx,vue}',
         },
       },
     },
@@ -28,10 +28,10 @@ module.exports = configure(function (ctx) {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli/boot-files
-    boot: ["i18n", "axios", "mock"],
+    boot: ['i18n', 'axios', 'mock'],
 
     // https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
-    css: ["app.scss"],
+    css: ['app.scss'],
     env: {
       BASE_API: process.env.BASE_API
     },
@@ -45,13 +45,13 @@ module.exports = configure(function (ctx) {
       // 'line-awesome',
       // 'roboto-font-latin-ext', // this or either 'roboto-font', NEVER both!
 
-      "roboto-font", // optional, you are not bound to it
-      "material-icons", // optional, you are not bound to it
+      'roboto-font', // optional, you are not bound to it
+      'material-icons', // optional, you are not bound to it
     ],
 
     // Full list of options: https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-build
     build: {
-      vueRouterMode: "hash", // available values: 'hash', 'history'
+      vueRouterMode: 'hash', // available values: 'hash', 'history'
 
       // transpile: false,
 
@@ -81,10 +81,10 @@ module.exports = configure(function (ctx) {
       https: false,
       port: 8080,
       open: false, // opens browser window automatically
-      before: require("./mock/mock-server.js"),
+      // before: require('./mock/mock-server.js'),
     },
 
-    // https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-framework
+    // https://v2.quasar.dev/quasar-cli/quasar-con'./mock/mock-server.js'ork
     framework: {
       config: {},
 
@@ -99,7 +99,7 @@ module.exports = configure(function (ctx) {
       // directives: [],
 
       // Quasar plugins
-      plugins: ["LocalStorage", "SessionStorage"],
+      plugins: ['LocalStorage', 'SessionStorage'],
     },
 
     // animations: 'all', // --- includes all animations
@@ -121,55 +121,55 @@ module.exports = configure(function (ctx) {
       },
 
       middlewares: [
-        ctx.prod ? "compression" : "",
-        "render", // keep this as last one
+        ctx.prod ? 'compression' : '',
+        'render', // keep this as last one
       ],
     },
 
     // https://v2.quasar.dev/quasar-cli/developing-pwa/configuring-pwa
     pwa: {
-      workboxPluginMode: "GenerateSW", // 'GenerateSW' or 'InjectManifest'
+      workboxPluginMode: 'GenerateSW', // 'GenerateSW' or 'InjectManifest'
       workboxOptions: {}, // only for GenerateSW
 
-      // for the custom service worker ONLY (/src-pwa/custom-service-worker.[js|ts])
+      // for the custom service worker ONLY (/src-pw````````````  qA    A      a/custom-service-worker.[js|ts])
       // if using workbox in InjectManifest mode
       chainWebpackCustomSW(/* chain */) {
         //
       },
 
       manifest: {
-        name: "ReProject",
-        short_name: "ReProject",
-        description: "A Quasar Framework app",
-        display: "standalone",
-        orientation: "portrait",
-        background_color: "#ffffff",
-        theme_color: "#027be3",
+        name: 'ReProject',
+        short_name: 'ReProject',
+        description: 'A Quasar Framework app',
+        display: 'standalone',
+        orientation: 'portrait',
+        background_color: '#ffffff',
+        theme_color: '#027be3',
         icons: [
           {
-            src: "icons/icon-128x128.png",
-            sizes: "128x128",
-            type: "image/png",
+            src: 'icons/icon-128x128.png',
+            sizes: '128x128',
+            type: 'image/png',
           },
           {
-            src: "icons/icon-192x192.png",
-            sizes: "192x192",
-            type: "image/png",
+            src: 'icons/icon-192x192.png',
+            sizes: '192x192',
+            type: 'image/png',
           },
           {
-            src: "icons/icon-256x256.png",
-            sizes: "256x256",
-            type: "image/png",
+            src: 'icons/icon-256x256.png',
+            sizes: '256x256',
+            type: 'image/png',
           },
           {
-            src: "icons/icon-384x384.png",
-            sizes: "384x384",
-            type: "image/png",
+            src: 'icons/icon-384x384.png',
+            sizes: '384x384',
+            type: 'image/png',
           },
           {
-            src: "icons/icon-512x512.png",
-            sizes: "512x512",
-            type: "image/png",
+            src: 'icons/icon-512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
           },
         ],
       },
@@ -187,7 +187,7 @@ module.exports = configure(function (ctx) {
 
     // Full list of options: https://v2.quasar.dev/quasar-cli/developing-electron-apps/configuring-electron
     electron: {
-      bundler: "packager", // 'packager' or 'builder'
+      bundler: 'packager', // 'packager' or 'builder'
 
       packager: {
         // https://github.com/electron-userland/electron-packager/blob/master/docs/api.md#options
@@ -203,7 +203,7 @@ module.exports = configure(function (ctx) {
       builder: {
         // https://www.electron.build/configuration/configuration
 
-        appId: "reproject-vue",
+        appId: 'reproject-vue',
       },
 
       // "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain

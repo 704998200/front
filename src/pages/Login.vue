@@ -1,7 +1,7 @@
 <template>
   <div class="q-pa-md" style="max-width: 400px" :class="'fixed-center'">
-    <span CLASS="KKK">项目管理追踪系统</span>
-    <q-form action="" @submit="onSubmit" @reset="onRegist" class="q-gutter-md">
+    <span class="KKK">项目管理追踪系统</span>
+    <q-form action=""  class="q-gutter-md">
       <q-input
         filled
         v-model="username"
@@ -26,10 +26,13 @@
       </q-input>
 
       <div>
-        <q-btn label="Submit" type="submit" color="primary" />
         <q-btn
+          @click="onSubmit"
+          label="Submit"
+          color="primary"/>
+        <q-btn
+          @click="onRegist"
           label="Regist"
-          type="regist"
           color="primary"
           flat
           class="q-ml-sm"
@@ -59,50 +62,48 @@
 </style>
 
 <script>
-import { useQuasar } from "quasar";
-import { ref } from "vue";
-import { api } from "../boot/axios";
-import { useRoute, useRouter } from "vue-router";
 
+import {ref} from 'vue';
+import {api} from '../boot/axios';
+import {useRouter} from 'vue-router';
+
+let router;
 export default {
+  const:router=useRouter(),
   setup() {
-    const $q = useQuasar();
     const username = ref(null);
     const password = ref(null);
     const isPwd = ref(true);
-    const route = useRoute();
-    const router = useRouter();
+    const router=useRouter();
 
     return {
       username,
       password,
       isPwd,
-      route,
-      router,
+
       onSubmit() {
-        $q.notify({
-          color: "green-4",
-          textColor: "white",
-          icon: "cloud_done",
-          message: "Submitted",
-        }),
           api
-            .post("/user/login", {})
+            .post('/user/login', {
+              username,
+              password,
+            })
             .then((successResponse) => {
               const responseResult = JSON.stringify(successResponse.data);
               // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
               if (successResponse.data.code === 200) {
-                void router.replace({ path: "/index" });
-                alert("登陆成功!");
+                void router.replace({path: '/index'});
+                alert('登陆成功!');
               }
             })
             .catch((failResponse) => {
-              path: "/user/login", alert("登录失败！");
+              path: '/login', alert('登录失败！');
             });
-        // onRegist() {
-        //
-        // }
       },
+      onRegist() {
+        void router.push({path: '/regist'}
+        );
+
+      }
     };
   },
 };
