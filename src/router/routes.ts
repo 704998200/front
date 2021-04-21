@@ -4,8 +4,7 @@ import { RouteRecordRaw} from 'vue-router';
 const routes: RouteRecordRaw[] = [
   {
     path: '/login',
-    // component: () => import('layouts/MainLayout.vue'),
-    // children: [{ path: '', component: () => import('pages/Index.vue') }],
+
     component: () => import('pages/Login.vue'),
   },
   {
@@ -16,6 +15,8 @@ const routes: RouteRecordRaw[] = [
     path: '/main',
 
     component: () => import('pages/Main.vue'),
+
+    children: [{path: 'index', component: () => import('components/CompositionComponent.vue')}],
   },
   {
     path: '/*',

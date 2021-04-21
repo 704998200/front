@@ -15,10 +15,11 @@
         <q-toolbar-title v-if="$q.screen.gt.xs" shrink class="row items-center no-wrap">
           <span>项目管理追踪系统</span>
         </q-toolbar-title>
-
+        <q-space/>
+        <q-space/>
         <div class="q-gutter-sm row items-center no-wrap">
           <q-btn round flat>
-            <q-avatar size="26px" :class="Right">
+            <q-avatar size="26px" :class="'float-right'">
               <img src="https://cdn.quasar.dev/img/boy-avatar.png">
             </q-avatar>
             <q-tooltip>Account</q-tooltip>

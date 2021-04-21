@@ -1,57 +1,45 @@
 <template>
-  <div>
-    <p>{{ title }}</p>
-    <ul>
-      <li v-for="todo in todos" :key="todo.id" @click="increment">
-        {{ todo.id }} - {{ todo.content }}
-      </li>
-    </ul>
-    <p>Count: {{ todoCount }} / {{ meta.totalCount }}</p>
-    <p>Active: {{ active ? "yes" : "no" }}</p>
-    <p>Clicks on todos: {{ clickCount }}</p>
+  <div class="q-pa-md">
+    <q-btn color="primary" label="NEW"/>
+    <q-space/>
+  </div>
+  <q-separator></q-separator>
+  <div class="q-pa-md q-gutter-md">
+    <q-list bordered separator padding
+            class="rounded-borders" style="max-width: 100%">
+      <q-item v-for="link in links1" :key="link.text">
+        <q-item-section avatar>
+          <q-avatar icon="folder" color="primary" text-color="white" q/>
+        </q-item-section>
+
+        <q-item-section v-ripple clickable>
+          <q-item-label>{{ link.text }}</q-item-label>
+          <q-item-label caption>{{ link.createtime }}</q-item-label>
+        </q-item-section>
+
+        <q-item-section side>
+          <q-icon name="info" color=""/>
+        </q-item-section>
+        <q-btn color="primary" label="Delte"/>
+        <q-separator></q-separator>
+      </q-item>
+
+    </q-list>
   </div>
 </template>
-
-<script lang="ts">
-import { defineComponent, PropType, computed, ref, toRef, Ref } from "vue";
-import { Todo, Meta } from "./models";
-
-function useClickCount() {
-  const clickCount = ref(0);
-  function increment() {
-    clickCount.value += 1;
-    return clickCount.value;
-  }
-
-  return { clickCount, increment };
-}
-
-function useDisplayTodo(todos: Ref<Todo[]>) {
-  const todoCount = computed(() => todos.value.length);
-  return { todoCount };
-}
-
-export default defineComponent({
-  name: "CompositionComponent",
-  props: {
-    title: {
-      type: String,
-      required: true,
-    },
-    todos: {
-      type: Array as PropType<Todo[]>,
-      default: () => [],
-    },
-    meta: {
-      type: Object as PropType<Meta>,
-      required: true,
-    },
-    active: {
-      type: Boolean,
-    },
+<script>
+export default {
+  name: 'MyLayout',
+  data() {
+    return {
+      leftDrawerOpen: false,
+      search: '',
+      links1: [
+        {icon: 'home', text: 'Home'},
+        {icon: 'whatshot', text: 'Trending'},
+        {icon: 'subscriptions', text: 'Subscriptions'}
+      ],
+    }
   },
-  setup(props) {
-    return { ...useClickCount(), ...useDisplayTodo(toRef(props, "todos")) };
-  },
-});
+}
 </script>
