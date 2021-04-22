@@ -1,11 +1,40 @@
 <template>
   <div class="q-pa-md">
-    <q-btn color="primary" label="NEW"/>
-    <q-space/>
+    <q-btn @click="layout = true" color="primary" label="NEW"/>
+    <q-dialog v-model="layout">
+      <q-layout view="Lhh lpR fff" container class="bg-white">
+        <q-header class="bg-primary">
+
+        </q-header>
+
+
+        <q-page-container>
+          <q-page padding>
+            <q-form
+              class="q-gutter-md"
+            >
+              <q-input
+                outlined
+                v-model="projectname"
+                label="项目名称 *"
+                hint="项目名称"
+              />
+              <q-select outlined multiple v-model="multiple" :options="options" label="项目人员"/>
+
+              <div>
+                <q-btn label="Submit" type="submit" color="primary"/>
+              </div>
+            </q-form>
+          </q-page>
+        </q-page-container>
+      </q-layout>
+    </q-dialog>
   </div>
+    <q-space/>
+
   <q-separator></q-separator>
   <div class="q-pa-md q-gutter-md">
-    <q-list bordered separator padding
+    <q-list bordered separator
             class="rounded-borders" style="max-width: 100%">
       <q-item v-for="link in links1" :key="link.text">
         <q-item-section avatar>
@@ -26,9 +55,25 @@
 
     </q-list>
   </div>
+
 </template>
 <script>
+import {ref} from 'vue'
 export default {
+  setup() {
+
+
+    return {
+      layout: ref(false),
+
+      single: ref(null),
+      multiple: ref(null),
+
+      options: [
+        'Google', 'Facebook', 'Twitter', 'Apple', 'Oracle'
+      ]
+    }
+  },
   name: 'MyLayout',
   data() {
     return {
@@ -41,5 +86,6 @@ export default {
       ],
     }
   },
+
 }
 </script>
