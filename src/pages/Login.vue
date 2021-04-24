@@ -66,10 +66,10 @@
 import {ref} from 'vue';
 import {api} from '../boot/axios';
 import {useRouter} from 'vue-router';
+import store from "../store";
 
-let router;
 export default {
-  const:router=useRouter(),
+
   setup() {
     const username = ref(null);
     const password = ref(null);
@@ -88,9 +88,15 @@ export default {
               password,
             })
             .then((successResponse) => {
-              const responseResult = JSON.stringify(successResponse.data);
+              const responseResult = JSON.stringify(successResponse);
               // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-              if (successResponse.data.code === 200) {
+              if (responseResult.httpState === 200) {
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access
+                const token = responseResult.data.token;
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access
+                const level = responseResult.data.level;
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                store.commit('set_token', {token, level})
                 void router.replace({path: '/index'});
                 alert('登陆成功!');
               }

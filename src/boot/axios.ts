@@ -1,12 +1,15 @@
 import axios from 'axios';
-import { boot } from 'quasar/wrappers';
+import {boot} from 'quasar/wrappers';
 import store from 'src/store';
-import routes from 'src/router/routes';
-import { createRouter, createWebHashHistory } from 'vue-router';
-const api = axios.create({ baseURL: 'http://localhost:8000/' });
-const router = createRouter({ history: createWebHashHistory(), routes });
+import {useRouter} from 'vue-router';
 
-export default boot(({ app }) => {
+const api = axios.create({
+  baseURL: 'http://localhost:8000/',
+  timeout: 5000
+});
+const router = useRouter();
+
+export default boot(({app}) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api
 
   app.config.globalProperties.$axios = axios;
@@ -17,6 +20,7 @@ export default boot(({ app }) => {
   // ^ ^ ^ this will allow you to use this.$api (for Vue Options API form)
   //       so you can easily perform requests against your app's API
 });
+// http request 拦截器
 api.interceptors.request.use(
   (config) => {
     if (store.state.token) {
@@ -43,11 +47,11 @@ api.interceptors.response.use(
       switch (error.response.status) {
         case 401:
           // 返回 401 清除token信息并跳转到登录页面
-          store.commit('del_token', store.state);
+          store.commit('del_token');
           void router.replace({
             path: '/login',
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            query: {},
+            query: {redirect: router.currentRoute.value.fullPath},
           });
       }
     }

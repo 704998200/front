@@ -16,15 +16,21 @@ const routes: RouteRecordRaw[] = [
 
     component: () => import('pages/Main.vue'),
 
-    children: [{path: 'index', component: () => import('components/CompositionComponent.vue')}],
-  },
-  {
-    path: '/*',
-    component: () => import('pages/Error404.vue'),
+    children: [{
+      path: 'index', component: () => import('components/CompositionComponent.vue'),
+      meta: {
+        requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+        level: 1
+      },
+    }],
     meta: {
       requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
-      role: 'user',
     },
+  },
+  {
+    path: '/',
+    component: () => import('pages/Login.vue'),
+
   },
   {
     path: '/:catchAll(.*)*',

@@ -41,7 +41,12 @@ export default route(function (/* { store, ssrContext } */) {
       // 判断该路由是否需要登录权限
       if (LocalStorage.getItem('token') != ''&&LocalStorage.getItem('token') != null) {
         // 通过vuex state获取当前的token是否存在
-        next();
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        if (eval(LocalStorage.getItem('level')) >= eval(to.meta.level) && LocalStorage.getItem('level') != null) {
+          // 通过vuex state获取当前的level是否足够
+          next();
+        }
       } else {
         next({
           path: '/login',
