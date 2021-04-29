@@ -17,14 +17,14 @@ const routes: RouteRecordRaw[] = [
     component: () => import('pages/Main.vue'),
 
     children: [{
-      path: 'index', component: () => import('components/CompositionComponent.vue'),
+      path: 'project', component: () => import('components/userprojectmange.vue'),
       meta: {
-        requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+        // requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
         level: 1
       },
     }],
     meta: {
-      requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+      // requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
     },
   },
   {

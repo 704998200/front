@@ -81,49 +81,46 @@
 import {useQuasar} from "quasar";
 import {ref} from "vue";
 import {api} from "../boot/axios";
-import {useRoute, useRouter} from "vue-router";
+import {useRouter} from "vue-router";
 
 export default {
-  setup() {
-    const $q = useQuasar();
-    const username = ref(null);
-    const password = ref(null);
-    const repassword = ref(null);
+  data() {
     const isPwd = ref(true);
     const router = useRouter();
-
     return {
-      username,
-      password,
-      repassword,
+      username: null,
+      password: null,
+      repassword: null,
       isPwd,
-      router,
+      router
+    };
 
-      onSubmit() {
-        api
-          .post("/user/login", {
-            username,
-            password,
-          })
-          .then((successResponse) => {
-            const responseResult = JSON.stringify(successResponse.data);
-
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-            if (successResponse.data.code === 200) {
-
-              void router.replace({path: "/login"});
-              alert("注册成功!");
-            }
-          })
-          .catch((failResponse) => {
-            path: "/user/login", alert("登录失败！");
-          });
-      },
-      onLogin() {
-        void router.push({path: '/login'})
-      },
-    }
   },
+  methods: {
+    onSubmit() {
+      let username = this.username
+      let password = this.password
+      api
+        .post("/user/login", {
+          username,
+          password,
+        })
+        .then((successResponse) => {
+          const responseResult = JSON.stringify(successResponse.data);
+          if (successResponse.data.code === 200) {
+            void router.replace({path: "/login"});
+            alert("注册成功!");
+          }
+        })
+        .catch((failResponse) => {
+          path: "/user/login", alert("注册失败！");
+        });
+    },
+    onLogin() {
+      let router = this.router;
+      void router.push({path: '/login'});
+    },
+  }
 };
 </script>
 

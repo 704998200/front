@@ -15,15 +15,15 @@ const store = createStore({
     token: '',
   },
   mutations: {
-    set_token(state, {token, level}) {
+    set_token(state, payload) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      state.token = token;
+      state.token = payload.token;
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      state.level = level;
+      state.level = payload.level;
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      localStorage.token = token;
+      localStorage.token = payload.token;
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      localStorage.level = level;
+      localStorage.level = payload.level;
     },
     del_token(state) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment

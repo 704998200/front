@@ -68,34 +68,23 @@ import {useRouter} from "vue-router";
 import store from "../store";
 
 export default {
-
-  setup() {
-    // const username = ref(null);
-    // const password = ref(null);
+  data() {
     const isPwd = ref(true);
     const router = useRouter();
-
-    return {
-      // username,
-      // password,
-      isPwd,
-
-      router
-    };
-  },
-  data() {
     return {
       username: null,
-      password: null
-
+      password: null,
+      isPwd,
+      router
     };
 
   },
 
   methods: {
     onSubmit() {
-      let username=this.username
-      let password=this.password
+      let username = this.username
+      let password = this.password
+      let token = null
       console.log(`输入信息 ${this.username} ${this.password} `);
       axios
         .post("/user/login", {
@@ -105,22 +94,30 @@ export default {
         .then((successResponse) => {
           const responseResult = JSON.stringify(successResponse);
           if (responseResult.httpState === 200) {
-            const token = responseResult.data.token;
-            const level = responseResult.data.level;
-            store.commit("set_token", {token, level});
-            void router.replace({path: "/index"});
-            alert("登陆成功!");
-            return token;
+            token = responseResult.data.token;
           }
+          return axios.post("/user/login", {
+            token
+          })
         })
+        .then((successResponse) => {
+            const responseResult = JSON.stringify(successResponse);
+            if (responseResult.httpState === 200) {
+              const level = responseResult.data.level;
+              store.commit("set_token", {token: token, level: level});
+              void router.replace({path: "/main"});
+              alert("登陆成功!");
+            }
+          }
+        )
         .catch((failResponse) => {
           path: "/login", alert("登录失败！");
         });
     },
     onRegist() {
+      let router = this.router
       void router.push({path: "/regist"}
       );
-
     }
   }
 };
