@@ -1,9 +1,14 @@
 <template>
+
   <div class="q-pa-md">
-    <q-btn @click="newp" color="primary" label="NEW"/>
+    <q-btn
+      @click="onNewpj"
+      color="primary"
+      label="NEW"
+    />
 
   </div>
-  <newproject></newproject>
+  <!--  <div v-model="newp"> <newproject></newproject> </div>-->
   <q-space/>
 
   <q-separator></q-separator>
@@ -12,7 +17,7 @@
             class="rounded-borders" style="max-width: 100%">
       <q-item v-for="link in links1" :key="link.text">
         <q-item-section avatar>
-          <q-avatar icon="folder" color="primary" text-color="white" q/>
+          <q-avatar icon="folder" color="primary" text-color="white"/>
         </q-item-section>
 
         <q-item-section @click="onMange" v-ripple clickable>
@@ -31,12 +36,17 @@
   </div>
 
 </template>
+
 <script>
+
+import {ref} from "vue"
+
 import newproject from "./newproject";
 
 export default {
   data() {
     return {
+      newp: ref(false),
       leftDrawerOpen: false,
       search: '',
       links1: [
@@ -46,12 +56,13 @@ export default {
       ],
     }
   },
-  components: {
-    newproject,
+  components() {
+    "newproject"
   },
-  Methods: {
-    newp() {
-
+  methods: {
+    onNewpj() {
+      let newp = this.newp;
+      newp = true;
     },
     onMange() {
 
