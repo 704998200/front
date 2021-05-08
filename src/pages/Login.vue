@@ -25,10 +25,7 @@
       </q-input>
 
       <div>
-        <q-btn
-          @click="onSubmit"
-          label="Submit"
-          color="primary"/>
+        <q-btn @click="onSubmit" label="Submit" color="primary" />
         <q-btn
           @click="onRegist"
           label="Regist"
@@ -61,10 +58,9 @@
 </style>
 
 <script>
-
-import {ref} from "vue";
-import {axios} from "../boot/axios";
-import {useRouter} from "vue-router";
+import { ref } from "vue";
+import { axios } from "../boot/axios";
+import { useRouter } from "vue-router";
 import store from "../store";
 
 export default {
@@ -75,16 +71,15 @@ export default {
       username: null,
       password: null,
       isPwd,
-      router
+      router,
     };
-
   },
 
   methods: {
     onSubmit() {
-      let username = this.username
-      let password = this.password
-      let token = null
+      let username = this.username;
+      let password = this.password;
+      let token = null;
       console.log(`输入信息 ${this.username} ${this.password} `);
       axios
         .post("/user/login", {
@@ -97,29 +92,27 @@ export default {
             token = responseResult.data.token;
           }
           return axios.post("/user/login", {
-            token
-          })
+            token,
+          });
         })
         .then((successResponse) => {
-            const responseResult = JSON.stringify(successResponse);
-            if (responseResult.httpState === 200) {
-              const level = responseResult.data.level;
-              store.commit("set_token", {token: token, level: level});
-              void router.replace({path: "/main"});
-              alert("登陆成功!");
-            }
+          const responseResult = JSON.stringify(successResponse);
+          if (responseResult.httpState === 200) {
+            const level = responseResult.data.level;
+            store.commit("set_token", { token: token, level: level });
+            void router.replace({ path: "/main" });
+            alert("登陆成功!");
           }
-        )
+        })
         .catch((failResponse) => {
           path: "/login", alert("登录失败！");
         });
     },
     onRegist() {
-      let router = this.router
-      void router.push({path: "/regist"}
-      );
-    }
-  }
+      let router = this.router;
+      void router.push({ path: "/regist" });
+    },
+  },
 };
 </script>
 
