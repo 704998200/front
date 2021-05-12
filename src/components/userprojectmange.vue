@@ -1,8 +1,5 @@
 <template>
-  <div class="q-pa-md">
-    <q-btn @click="onNewpj" color="primary" label="NEW" />
-  </div>
-  <!--  <div v-model="newp"> <newproject></newproject> </div>-->
+ <Newproject></Newproject>
   <q-space />
 
   <q-separator></q-separator>
@@ -31,7 +28,7 @@
 <script>
 import { ref } from "vue";
 
-import newproject from "./newproject";
+import Newproject from "./newproject";
 
 export default {
   data() {
@@ -40,21 +37,19 @@ export default {
       leftDrawerOpen: false,
       search: "",
       links1: [
-        { text: "Home" },
-        { text: "Trending" },
-        { text: "Subscriptions" },
+        {text: "Home"},
+        {text: "Trending"},
+        {text: "Subscriptions"},
       ],
     };
   },
-  components() {
-    "newproject";
+  components: {
+    "Newproject": Newproject,
   },
   methods: {
-    onNewpj() {
-      let newp = this.newp;
-      newp = true;
+
+    onMange() {
     },
-    onMange() {},
   },
 };
 </script>
