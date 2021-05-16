@@ -41,11 +41,7 @@
       </q-input>
 
       <div>
-        <q-btn
-          label="Submit"
-          @click="onSubmit"
-          color="primary"
-        />
+        <q-btn label="Submit" @click="onSubmit" color="primary" />
         <q-btn
           label="Login"
           @click="onLogin"
@@ -78,10 +74,10 @@
 </style>
 
 <script>
-import {useQuasar} from "quasar";
-import {ref} from "vue";
-import {api} from "../boot/axios";
-import {useRouter} from "vue-router";
+import { useQuasar } from "quasar";
+import { ref } from "vue";
+import { api } from "../boot/axios";
+import { useRouter } from "vue-router";
 
 export default {
   data() {
@@ -92,14 +88,13 @@ export default {
       password: null,
       repassword: null,
       isPwd,
-      router
+      router,
     };
-
   },
   methods: {
     onSubmit() {
-      let username = this.username
-      let password = this.password
+      let username = this.username;
+      let password = this.password;
       api
         .post("/user/login", {
           username,
@@ -108,7 +103,7 @@ export default {
         .then((successResponse) => {
           const responseResult = JSON.stringify(successResponse.data);
           if (successResponse.data.code === 200) {
-            void router.replace({path: "/login"});
+            void router.replace({ path: "/login" });
             alert("注册成功!");
           }
         })
@@ -118,9 +113,9 @@ export default {
     },
     onLogin() {
       let router = this.router;
-      void router.push({path: '/login'});
+      void router.push({ path: "/login" });
     },
-  }
+  },
 };
 </script>
 

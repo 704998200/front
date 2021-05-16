@@ -12,15 +12,19 @@
           class="q-mr-sm"
         />
 
-        <q-toolbar-title v-if="$q.screen.gt.xs" shrink class="row items-center no-wrap">
+        <q-toolbar-title
+          v-if="$q.screen.gt.xs"
+          shrink
+          class="row items-center no-wrap"
+        >
           <span>项目管理追踪系统</span>
         </q-toolbar-title>
-        <q-space/>
-        <q-space/>
+        <q-space />
+        <q-space />
         <div class="q-gutter-sm row items-center no-wrap">
           <q-btn round flat>
             <q-avatar size="26px" :class="'float-right'">
-              <img src="https://cdn.quasar.dev/img/boy-avatar.png">
+              <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
             </q-avatar>
             <q-tooltip>Account</q-tooltip>
           </q-btn>
@@ -37,9 +41,15 @@
     >
       <q-scroll-area class="fit">
         <q-list padding class="text-grey-8">
-          <q-item class="GNL__drawer-item" v-ripple v-for="link in links1" :key="link.text" clickable>
+          <q-item
+            class="GNL__drawer-item"
+            v-ripple
+            v-for="link in links1"
+            :key="link.text"
+            clickable
+          >
             <q-item-section avatar>
-              <q-icon :name="link.icon"/>
+              <q-icon :name="link.icon" />
             </q-item-section>
             <q-item-section>
               <q-item-label>{{ link.text }}</q-item-label>
@@ -50,25 +60,25 @@
     </q-drawer>
 
     <q-page-container>
-      <router-view/>
+      <router-view />
     </q-page-container>
   </q-layout>
 </template>
 
 <script>
 export default {
-  name: 'MainLayout',
+  name: "MainLayout",
   data() {
     return {
       leftDrawerOpen: false,
       links1: [
-        {icon: 'web', text: '项目管理'},
-        {icon: 'person', text: '问题追踪'},
+        { icon: "web", text: "项目管理" },
+        { icon: "person", text: "问题追踪" },
       ],
-    }
+    };
   },
-  methods: {}
-}
+  methods: {},
+};
 </script>
 
 <style lang="sass">
