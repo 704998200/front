@@ -7,31 +7,23 @@ const routes: RouteRecordRaw[] = [
     component: () => import("pages/Login.vue"),
   },
   {
-    path: "/regist",
-    component: () => import("pages/Regist.vue"),
-  },
-  {
-    path: "/main",
-
-    component: () => import("pages/Main.vue"),
-
-    children: [
-      {
-        path: "project",
-        component: () => import("components/userprojectmange.vue"),
-        meta: {
-          // requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
-          level: 1,
-        },
-      },
-    ],
-    meta: {
-      // requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
-    },
+    path: "/register",
+    component: () => import("pages/Register.vue"),
   },
   {
     path: "/",
-    component: () => import("pages/Login.vue"),
+    component: () => import("pages/Index.vue"),
+
+    // children: [
+    //   {
+    //     path: "project",
+    //     component: () => import("components/userprojectmange.vue"),
+    //     meta: {
+    //       // requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+    //       level: 1,
+    //     },
+    //   },
+    // ],
   },
   {
     path: "/:catchAll(.*)*",

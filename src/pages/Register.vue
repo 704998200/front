@@ -1,20 +1,20 @@
 <template>
-  <div class="q-pa-md" style="max-width: 400px" :class="'fixed-center'">
+  <div :class="'fixed-center'" class="q-pa-md" style="max-width: 400px">
     <span CLASS="KKK">项目管理追踪系统注册</span>
     <q-form action="" class="q-gutter-md">
       <q-input
-        filled
         v-model="username"
+        :rules="[(val) => (val && val.length > 0) || 'Please type something']"
+        filled
         label="Your username *"
         lazy-rules
-        :rules="[(val) => (val && val.length > 0) || 'Please type something']"
       />
 
       <q-input
         v-model="password"
-        label="Your password *"
-        filled
         :type="isPwd ? 'password' : 'text'"
+        filled
+        label="Your password *"
       >
         <template v-slot:append>
           <q-icon
@@ -27,9 +27,9 @@
 
       <q-input
         v-model="repassword"
-        label="Enter your password  again*"
-        filled
         :type="isPwd ? 'password' : 'text'"
+        filled
+        label="Enter your password  again*"
       >
         <template v-slot:append>
           <q-icon
@@ -41,13 +41,13 @@
       </q-input>
 
       <div>
-        <q-btn label="Submit" @click="onSubmit" color="primary" />
+        <q-btn color="primary" label="Submit" @click="onSubmit" />
         <q-btn
-          label="Login"
-          @click="onLogin"
+          class="q-ml-sm"
           color="primary"
           flat
-          class="q-ml-sm"
+          label="Login"
+          @click="onLogin"
         />
       </div>
     </q-form>
@@ -74,7 +74,6 @@
 </style>
 
 <script>
-import { useQuasar } from "quasar";
 import { ref } from "vue";
 import { api } from "../boot/axios";
 import { useRouter } from "vue-router";

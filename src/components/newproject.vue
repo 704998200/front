@@ -1,22 +1,12 @@
 <template>
-
-  <div class="q-pa-md">
-  </div>
-
-
+  <div class="q-pa-md"></div>
 </template>
 
 <script>
-import {useQuasar} from 'quasar'
-import newprojectA from "./newprojectA";
-
 export default {
   name: "Newproject",
 
-  data() {
-  },
-  methods: {
-
-  }
-}
+  data() {},
+  methods: {},
+};
 </script>

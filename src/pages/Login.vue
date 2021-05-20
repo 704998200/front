@@ -1,19 +1,19 @@
 <template>
-  <div class="q-pa-md" style="max-width: 400px" :class="'fixed-center'">
+  <div :class="'fixed-center'" class="q-pa-md" style="max-width: 400px">
     <span class="KKK">项目管理追踪系统</span>
     <q-form action="" class="q-gutter-md">
       <q-input
-        filled
         v-model="username"
-        label="Your username *"
         :rules="[(val) => (val && val.length > 0) || 'Please type something']"
+        filled
+        label="Your username *"
       />
 
       <q-input
         v-model="password"
-        label="Your password *"
-        filled
         :type="isPwd ? 'password' : 'text'"
+        filled
+        label="Your password *"
       >
         <template v-slot:append>
           <q-icon
@@ -25,13 +25,13 @@
       </q-input>
 
       <div>
-        <q-btn @click="onSubmit" label="Submit" color="primary" />
+        <q-btn color="primary" label="Submit" @click="onSubmit" />
         <q-btn
-          @click="onRegist"
-          label="Regist"
+          class="q-ml-sm"
           color="primary"
           flat
-          class="q-ml-sm"
+          label="Regist"
+          @click="onRegist"
         />
       </div>
     </q-form>

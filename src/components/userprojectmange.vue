@@ -1,29 +1,25 @@
 <template>
   <!--  <Newproject></Newproject>-->
-  <q-btn
-    @click="showdialog"
-    color="primary"
-    label="NEW"
-  />
-  <q-space/>
+  <q-btn color="primary" label="NEW" @click="showdialog" />
+  <q-space />
 
   <q-separator></q-separator>
   <div class="q-pa-md q-gutter-md">
-    <q-list bordered separator class="rounded-borders" style="max-width: 100%">
+    <q-list bordered class="rounded-borders" separator style="max-width: 100%">
       <q-item v-for="link in links1" :key="link.text">
         <q-item-section avatar>
-          <q-avatar icon="folder" color="primary" text-color="white"/>
+          <q-avatar color="primary" icon="folder" text-color="white" />
         </q-item-section>
 
-        <q-item-section @click="onMange" v-ripple clickable>
+        <q-item-section v-ripple clickable @click="onMange">
           <q-item-label>{{ link.text }}</q-item-label>
           <q-item-label caption>{{ link.createtime }}</q-item-label>
         </q-item-section>
 
         <q-item-section side>
-          <q-icon name="info" color=""/>
+          <q-icon color="" name="info" />
         </q-item-section>
-        <q-btn color="primary" label="Delte"/>
+        <q-btn color="primary" label="Delte" />
         <q-separator></q-separator>
       </q-item>
     </q-list>
@@ -31,11 +27,8 @@
 </template>
 
 <script>
-import {ref} from "vue";
-
-import Newproject from "./newproject";
 import newprojectA from "./newprojectA";
-import {useQuasar} from "quasar";
+import { useQuasar } from "quasar";
 
 export default {
   setup() {
@@ -44,16 +37,20 @@ export default {
     function showdialog() {
       $q.dialog({
         component: newprojectA,
-        componentProps: {}
-      }).onOk(() => {
-        console.log("OK");
-      }).onCancel(() => {
-        console.log("Cancel");
-      }).onDismiss(() => {
-        console.log("Called on OK or Cancel");
-      });
+        componentProps: {},
+      })
+        .onOk(() => {
+          console.log("OK");
+        })
+        .onCancel(() => {
+          console.log("Cancel");
+        })
+        .onDismiss(() => {
+          console.log("Called on OK or Cancel");
+        });
     }
-    return {showdialog};
+
+    return { showdialog };
   },
   // data() {
   //   return {

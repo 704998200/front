@@ -1,22 +1,16 @@
 import axios from "axios";
-import {boot} from "quasar/wrappers";
-import store from "src/store";
-import {useRouter} from "vue-router";
-import {useStore} from "vuex"
+import { boot } from "quasar/wrappers";
+import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 
-let backendUrl;
-if (process.env.BACKEND_SERVER) {
-  backendUrl = process.env.BACKEND_SERVER;
-} else {
-  backendUrl = "http://localhost:8000/";
-}
 const api = axios.create({
-  baseURL: backendUrl,
+  baseURL: "http://localhost:8000/",
   timeout: 5000,
 });
+
 const router = useRouter();
 
-export default boot(({app}) => {
+export default boot(({ app }) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api
 
   app.config.globalProperties.$axios = axios;
@@ -31,7 +25,7 @@ export default boot(({app}) => {
 // http request 拦截器
 axios.interceptors.request.use(
   (config) => {
-    const $store = useStore()
+    const $store = useStore();
     console.log("请求拦截" + config);
     // 存在 bearerToken 就携带上
     if ($store.state.token.bearerToken) {
@@ -69,4 +63,4 @@ axios.interceptors.response.use(
     return Promise.reject(error.response); // 返回接口返回的错误信息
   }
 );
-export {axios, api};
+export { axios, api };

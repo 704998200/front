@@ -79,7 +79,7 @@ module.exports = configure(function (ctx) {
     // Full list of options: https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-devServer
     devServer: {
       https: false,
-      port: 8080,
+      port: 8777,
       open: false, // opens browser window automatically
       // before: require('./mock/mock-server.js'),
     },
