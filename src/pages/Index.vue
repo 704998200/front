@@ -60,8 +60,12 @@
 </template>
 
 <script>
+import { computed } from "vue";
+import { useStore } from "../store";
+import { useRouter } from "vue-router";
+
 export default {
-  name: "MainLayout",
+  // name: "MainLayout",
   data() {
     return {
       leftDrawerOpen: false,
@@ -72,6 +76,29 @@ export default {
     };
   },
   methods: {},
+  mounted() {
+    const router = useRouter();
+    if (this.tokenState === "") {
+      // 说明还没有准备 Token,自然就是去登陆
+      // console.log("还没有登陆");
+      router.push({ path: "/login" });
+    }
+  },
+  setup(props) {
+    const myStore = useStore();
+    // console.log(myStore);
+    const tokenState = computed({
+      // 相当于重写了返回值,参考 Kotlin
+      set: (value) => {
+        myStore.commit("token/setBearerToken", value);
+      },
+      // get: () => myStore.getters["token/getBearerToken"],
+      get: () => myStore.state.token.bearerToken,
+    });
+    return {
+      tokenState,
+    };
+  },
 };
 </script>
 

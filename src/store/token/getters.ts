@@ -6,6 +6,7 @@ const getters: GetterTree<TokenStateInterface, StateInterface> = {
   someGetter(/* context */) {
     // your code
   },
+  // 这里写一个 get 方法
   getBearerToken(state) {
     return state.bearerToken;
   },
