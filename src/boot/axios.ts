@@ -1,14 +1,19 @@
-import axios from "axios";
 import { boot } from "quasar/wrappers";
-import { useRouter } from "vue-router";
-import { useStore } from "vuex";
+import axios, { AxiosInstance } from "axios";
 
-const api = axios.create({
-  baseURL: "http://localhost:8000/",
-  timeout: 5000,
-});
+declare module "@vue/runtime-core" {
+  interface ComponentCustomProperties {
+    $axios: AxiosInstance;
+  }
+}
 
-const router = useRouter();
+// Be careful when using SSR for cross-request state pollution
+// due to creating a Singleton instance here;
+// If any client changes this (global) instance, it might be a
+// good idea to move this instance creation inside of the
+// "export default () => {}" function below (which runs individually
+// for each client)
+const api = axios.create({ baseURL: "http://localhost:8080" });
 
 export default boot(({ app }) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api
@@ -22,45 +27,4 @@ export default boot(({ app }) => {
   //       so you can easily perform requests against your app's API
 });
 
-// http request 拦截器
-axios.interceptors.request.use(
-  (config) => {
-    const $store = useStore();
-    console.log("请求拦截" + config);
-    // 存在 bearerToken 就携带上
-    if ($store.state.token.bearerToken) {
-      config.headers.Authorization = `Bearer ${$store.state.token.bearerToken}`;
-    }
-    return config;
-  },
-  (err) => {
-    console.log(err);
-    return Promise.reject(err);
-  }
-);
-
-// http response 拦截器
-axios.interceptors.response.use(
-  (response) => {
-    console.log(response);
-    return response;
-  },
-  (error) => {
-    console.log("响应错误:" + error);
-    // if (error.response.baseURL)
-    // if (error.response) {
-    //   switch (error.response.status) {
-    //     case 401:
-    //       // 返回 401 清除token信息并跳转到登录页面
-    //       store.commit("del_token");
-    //
-    //       void router.replace({
-    //         path: "/login",
-    //         query: {redirect: router.currentRoute.value.fullPath},
-    //       });
-    //   }
-    // }
-    return Promise.reject(error.response); // 返回接口返回的错误信息
-  }
-);
-export { axios, api };
+export { api, axios };

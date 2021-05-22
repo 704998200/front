@@ -18,6 +18,7 @@
           shrink
         >
           <span>项目管理追踪系统</span>
+          <!--          <span>{{ tokenState }}</span>-->
         </q-toolbar-title>
         <q-space />
         <q-space />
@@ -59,10 +60,10 @@
   </q-layout>
 </template>
 
-<script>
-import { computed } from "vue";
-import { useStore } from "../store";
-import { useRouter } from "vue-router";
+<script lang="ts">
+import { computed, onMounted } from "vue";
+import { useStore } from "vuex";
+import { useRoute, useRouter } from "vue-router";
 
 export default {
   // name: "MainLayout",
@@ -76,24 +77,26 @@ export default {
     };
   },
   methods: {},
-  mounted() {
-    const router = useRouter();
-    if (this.tokenState === "") {
-      // 说明还没有准备 Token,自然就是去登陆
-      // console.log("还没有登陆");
-      router.push({ path: "/login" });
-    }
-  },
-  setup(props) {
+  setup() {
     const myStore = useStore();
-    // console.log(myStore);
-    const tokenState = computed({
+    const router = useRouter();
+    const route = useRoute();
+    console.log(myStore);
+    let tokenState = computed({
       // 相当于重写了返回值,参考 Kotlin
       set: (value) => {
+        console.log("刷新 token");
         myStore.commit("token/setBearerToken", value);
       },
-      // get: () => myStore.getters["token/getBearerToken"],
       get: () => myStore.state.token.bearerToken,
+    });
+    onMounted(() => {
+      if (tokenState.value === "") {
+        // 说明还没有准备 Token,自然就是去登陆
+        console.log("还没有登陆");
+        router.push({ path: "/login" });
+        // router.push({ path: "/login" });
+      }
     });
     return {
       tokenState,
