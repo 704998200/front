@@ -4,16 +4,16 @@
     <q-form action="" class="q-gutter-md">
       <q-input
         v-model="username"
-        :rules="[(val) => (val && val.length > 0) || 'Please type something']"
+        :rules="[(val) => (val && val.length > 0) || '用户名不能为空']"
         filled
-        label="Your username *"
+        label="用户名 *"
       />
 
       <q-input
         v-model="password"
         :type="isPwd ? 'password' : 'text'"
         filled
-        label="Your password *"
+        label="你的密码 *"
       >
         <template v-slot:append>
           <q-icon
@@ -25,13 +25,13 @@
       </q-input>
 
       <div>
-        <q-btn color="primary" label="Submit" @click="onSubmit" />
+        <q-btn color="primary" label="登录" @click="login" />
         <q-btn
           class="q-ml-sm"
           color="primary"
           flat
-          label="Regist"
-          @click="onRegist"
+          label="注册"
+          @click="register"
         />
       </div>
     </q-form>
@@ -58,58 +58,61 @@
 </style>
 
 <script>
-import { ref } from "vue";
-import { axios } from "../boot/axios";
+import { axios } from "src/boot/axios";
 import { useRouter } from "vue-router";
-import store from "../store";
+import { useQuasar } from "quasar";
+import { useStore } from "vuex";
+import { computed } from "vue";
 
 export default {
   data() {
-    const isPwd = ref(true);
-    const router = useRouter();
     return {
-      username: null,
-      password: null,
-      isPwd,
+      username: "",
+      password: "",
+      isPwd: true,
+    };
+  },
+  setup() {
+    const router = useRouter();
+    const $q = useQuasar();
+    const myStore = useStore();
+    let tokenState = computed({
+      // 相当于重写了返回值,参考 Kotlin
+      set: (value) => {
+        console.log("刷新 token");
+        myStore.commit("token/setBearerToken", value);
+      },
+      get: () => myStore.state.token.bearerToken,
+    });
+    return {
+      tokenState,
       router,
     };
   },
-
   methods: {
-    onSubmit() {
+    login() {
       let username = this.username;
       let password = this.password;
-      let token = null;
-      console.log(`输入信息 ${this.username} ${this.password} `);
+      console.log(`输入信息 ${username} ${password} `);
       axios
-        .post("/user/login", {
+        .post("/api/auth/login", {
           username,
           password,
         })
         .then((successResponse) => {
-          const responseResult = JSON.stringify(successResponse);
-          if (responseResult.httpState === 200) {
-            token = responseResult.data.token;
-          }
-          return axios.post("/user/login", {
-            token,
+          console.log(successResponse);
+          const responseResult = JSON.parse(successResponse);
+          let responseData = responseResult.data;
+          this.tokenState = responseData.data.token;
+          // 跳转回到首页
+          this.router.push({
+            path: "/",
           });
         })
-        .then((successResponse) => {
-          const responseResult = JSON.stringify(successResponse);
-          if (responseResult.httpState === 200) {
-            const level = responseResult.data.level;
-            store.commit("set_token", { token: token, level: level });
-            void router.replace({ path: "/main" });
-            alert("登陆成功!");
-          }
-        })
-        .catch((failResponse) => {
-          path: "/login", alert("登录失败！");
-        });
+        .catch((failResponse) => {});
     },
-    onRegist() {
-      let router = this.router;
+    register() {
+      let router = this.$router;
       void router.push({ path: "/regist" });
     },
   },

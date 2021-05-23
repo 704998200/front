@@ -91,7 +91,7 @@ export default {
     };
   },
   methods: {
-    onSubmit() {
+    login() {
       let username = this.username;
       let password = this.password;
       api
@@ -110,7 +110,7 @@ export default {
           path: "/user/login", alert("注册失败！");
         });
     },
-    onLogin() {
+    login() {
       let router = this.router;
       void router.push({ path: "/login" });
     },

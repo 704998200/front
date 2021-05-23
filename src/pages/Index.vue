@@ -81,7 +81,6 @@ export default {
     const myStore = useStore();
     const router = useRouter();
     const route = useRoute();
-    console.log(myStore);
     let tokenState = computed({
       // 相当于重写了返回值,参考 Kotlin
       set: (value) => {
@@ -91,11 +90,11 @@ export default {
       get: () => myStore.state.token.bearerToken,
     });
     onMounted(() => {
-      if (tokenState.value === "") {
+      console.log(tokenState);
+      if (tokenState.value == "") {
         // 说明还没有准备 Token,自然就是去登陆
         console.log("还没有登陆");
         router.push({ path: "/login" });
-        // router.push({ path: "/login" });
       }
     });
     return {

@@ -82,6 +82,18 @@ module.exports = configure(function (ctx) {
       port: 8777,
       open: false, // opens browser window automatically
       // before: require('./mock/mock-server.js'),
+      public: "reproject.misakacloud.dev:443",
+      // vueDevtools: true,
+      proxy: {
+        // proxy all requests starting with /api to jsonplaceholder
+        "/api": {
+          target: "http://localhost:8080",
+          changeOrigin: true,
+          pathRewrite: {
+            "^/api": "",
+          },
+        },
+      },
     },
 
     // https://v2.quasar.dev/quasar-cli/quasar-con'./mock/mock-server.js'ork
