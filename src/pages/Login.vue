@@ -100,10 +100,14 @@ export default {
           password,
         })
         .then((successResponse) => {
-          console.log(successResponse);
-          const responseResult = JSON.parse(successResponse);
-          let responseData = responseResult.data;
-          this.tokenState = responseData.data.token;
+          // console.log(successResponse);
+          // console.log(typeof successResponse.data);
+          // 不要解码,因为已经解码过了
+          const responseResult = successResponse.data;
+          // 所以下面就已经在访问返回的 JSON 的 data.token 字段
+          this.tokenState = responseResult.data.token;
+          // console.log(token);
+          console.log("Vuex 中的数据" + this.tokenState);
           // 跳转回到首页
           this.router.push({
             path: "/",

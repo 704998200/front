@@ -71,6 +71,7 @@ module.exports = configure(function (ctx) {
 
       // https://v2.quasar.dev/quasar-cli/handling-webpack
       // "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain
+      // APP_URL: "https://reproject.misakacloud.dev",
       chainWebpack(/* chain */) {
         //
       },
@@ -82,17 +83,15 @@ module.exports = configure(function (ctx) {
       port: 8777,
       open: false, // opens browser window automatically
       // before: require('./mock/mock-server.js'),
-      public: "reproject.misakacloud.dev:443",
+      // public: "reproject.misakacloud.dev:443",
       // vueDevtools: true,
+      // https: true,
+      // sockPort: 443,
+      // sockHost: "reproject.misakacloud.dev",
+      // sockPath: "/socket",
       proxy: {
         // proxy all requests starting with /api to jsonplaceholder
-        "/api": {
-          target: "http://localhost:8080",
-          changeOrigin: true,
-          pathRewrite: {
-            "^/api": "",
-          },
-        },
+        "/api": "http://localhost:8080",
       },
     },
 
