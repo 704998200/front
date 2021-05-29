@@ -1,11 +1,6 @@
 <template>
   <div class="q-pa-md">
-    <q-layout
-      view="lHh Lpr lff"
-      container
-      style="height: 300px"
-      class="shadow-2 rounded-borders"
-    >
+    <q-layout view="lHh Lpr lff">
       <q-header elevated class="bg-cyan-8">
         <q-toolbar>
           <q-toolbar-title>Header</q-toolbar-title>
@@ -83,6 +78,7 @@
 import { ref } from "vue";
 
 export default {
+  // TODO: 把Index的逻辑搬过来这里
   setup() {
     return {
       drawer: ref(false),
