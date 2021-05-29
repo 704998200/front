@@ -42,7 +42,13 @@
     >
       <q-scroll-area class="fit">
         <q-list class="text-grey-8" padding>
-          <q-item v-for="link in links1" :key="link.text" v-ripple clickable>
+          <q-item
+            v-for="link in links"
+            :key="link.text"
+            v-ripple
+            clickable
+            :to="link.target"
+          >
             <q-item-section avatar>
               <q-icon :name="link.icon" />
             </q-item-section>
@@ -70,9 +76,17 @@ export default {
   data() {
     return {
       leftDrawerOpen: false,
-      links1: [
-        { icon: "web", text: "项目管理" },
-        { icon: "person", text: "问题追踪" },
+      links: [
+        {
+          icon: "web",
+          text: "项目管理",
+          target: "/projects",
+        },
+        {
+          icon: "person",
+          text: "问题追踪",
+          target: "/issues",
+        },
       ],
     };
   },

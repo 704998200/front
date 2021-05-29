@@ -43,8 +43,8 @@ export default store(function (/* { ssrContext } */) {
     },
     // enable strict mode (adds overhead!)
     // for dev mode and --debug builds only
-    // strict: !!process.env.DEBUGGING,
-    plugins: [createPersistedState()],
+    strict: !!process.env.DEBUGGING,
+    plugins: [createPersistedState({ storage: window.sessionStorage })],
   });
 });
 
