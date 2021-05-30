@@ -6,7 +6,7 @@
         v-model="username"
         :rules="[(val) => (val && val.length > 0) || 'Please type something']"
         filled
-        label="Your username *"
+        label="用户名 *"
         lazy-rules
       />
 
@@ -14,7 +14,7 @@
         v-model="password"
         :type="isPwd ? 'password' : 'text'"
         filled
-        label="Your password *"
+        label="输入密码 *"
       >
         <template v-slot:append>
           <q-icon
@@ -29,7 +29,7 @@
         v-model="repassword"
         :type="isPwd ? 'password' : 'text'"
         filled
-        label="Enter your password  again*"
+        label="再次输入密码"
       >
         <template v-slot:append>
           <q-icon
@@ -41,13 +41,13 @@
       </q-input>
 
       <div>
-        <q-btn color="primary" label="Submit" @click="onSubmit" />
+        <q-btn color="primary" label="提交" @click="Submit"/>
         <q-btn
           class="q-ml-sm"
           color="primary"
           flat
-          label="Login"
-          @click="onLogin"
+          label="登录"
+          @click="Login"
         />
       </div>
     </q-form>
@@ -91,7 +91,7 @@ export default {
     };
   },
   methods: {
-    login() {
+    Submit() {
       let username = this.username;
       let password = this.password;
       api
@@ -110,9 +110,9 @@ export default {
           path: "/user/login", alert("注册失败！");
         });
     },
-    login() {
+    Login() {
       let router = this.router;
-      void router.push({ path: "/login" });
+      void router.push({path: "/login"});
     },
   },
 };
