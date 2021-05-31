@@ -103,14 +103,15 @@ export default {
       },
       get: () => myStore.state.token.bearerToken,
     });
-    // onMounted(() => {
-    //   console.log(tokenState);
-    //   if (tokenState.value == "") {
-    //     // 说明还没有准备 Token,自然就是去登陆
-    //     console.log("还没有登陆");
-    //     router.push({ path: "/login" });
-    //   }
-    // });
+    onMounted(() => {
+      console.log(tokenState);
+      if (tokenState.value == "") {
+        // 说明还没有准备 Token,自然就是去登陆
+        console.log("还没有登陆");
+        router.push({ path: "/login" });
+      }
+      // 获取用户信息填充 界面
+    });
     return {
       tokenState,
     };

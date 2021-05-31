@@ -1,5 +1,6 @@
 import { boot } from "quasar/wrappers";
 import axios, { AxiosInstance } from "axios";
+import { useStore } from "vuex";
 
 declare module "@vue/runtime-core" {
   interface ComponentCustomProperties {
@@ -14,6 +15,7 @@ declare module "@vue/runtime-core" {
 // "export default () => {}" function below (which runs individually
 // for each client)
 const api = axios.create({ baseURL: "http://localhost:8080" });
+const store = useStore();
 
 export default boot(({ app }) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api
@@ -26,5 +28,21 @@ export default boot(({ app }) => {
   // ^ ^ ^ this will allow you to use this.$api (for Vue Options API form)
   //       so you can easily perform requests against your app's API
 });
+
+axios.interceptors.request.use(
+  (config) => {
+    // console.log("请求拦截" + config);
+    console.log(`token为 ${store.state.token.bearerToken}`);
+    if (store.state.token) {
+      // 判断是否存在token，如果存在的话，则每个http header都加上token
+      config.headers.Authorization = `Bearer ${store.state.token.bearerToken}`;
+    }
+    return config;
+  },
+  (err) => {
+    console.log(err);
+    return Promise.reject(err);
+  }
+);
 
 export { api, axios };
