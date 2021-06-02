@@ -73,18 +73,10 @@ import { computed, onMounted, ref } from "vue";
 import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
 import { axios } from "boot/axios";
-// import { md5 } from "js-md5";
+
 const md5 = require("js-md5");
 export default {
   name: "ProjectLayout",
-  // data() {
-  //   return {
-  //
-  //     // email: "",
-  //     // emailHash: "",
-  //     // username: "",
-  //   };
-  // },
   methods: {
     debugAvatar() {
       // console.log(emailHash);
@@ -95,9 +87,10 @@ export default {
     const myStore = useStore();
     const router = useRouter();
     const route = useRoute();
-    let username = ref("");
-    let email = ref("");
-    let emailHash = ref("empy");
+    // 连续定义的简化写法
+    let username = ref(""),
+      email = ref(""),
+      emailHash = ref("empy");
     let tokenState = computed({
       // 相当于重写了返回值,参考 Kotlin
       set: (value) => {
@@ -119,15 +112,16 @@ export default {
         // 不要解码,因为已经解码过了
         const responseResult = successResponse.data;
         console.log(responseResult);
+        // 这里需要使用 value 来访问
         username.value = responseResult.data.username;
         email.value = responseResult.data.email;
         emailHash.value = md5(email.value);
-
         // console.log("邮件哈希:", emailHash.value);
       });
     });
     return {
       tokenState,
+      // 返回的时候不需要 value
       username,
       email,
       emailHash,
