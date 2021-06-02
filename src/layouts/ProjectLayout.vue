@@ -24,10 +24,12 @@
         <q-space />
         <div class="q-gutter-sm row items-center no-wrap">
           <q-btn flat round>
-            <q-avatar :class="'float-right'" size="26px">
-              <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
+            <q-avatar :class="'float-right'" size="30px">
+              <img
+                :src="`https://www.gravatar.com/avatar/${emailHash}?s=128&d=mm&r=g`"
+              />
             </q-avatar>
-            <q-tooltip>Account</q-tooltip>
+            <q-tooltip>{{ username }}</q-tooltip>
           </q-btn>
         </div>
       </q-toolbar>
@@ -67,34 +69,35 @@
 </template>
 
 <script lang="ts">
-import { computed, onMounted } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
-
+import { axios } from "boot/axios";
+// import { md5 } from "js-md5";
+const md5 = require("js-md5");
 export default {
-  // name: "MainLayout",
-  data() {
-    return {
-      leftDrawerOpen: false,
-      links: [
-        {
-          icon: "web",
-          text: "项目管理",
-          target: "/projects",
-        },
-        {
-          icon: "person",
-          text: "问题追踪",
-          target: "/issues",
-        },
-      ],
-    };
+  name: "ProjectLayout",
+  // data() {
+  //   return {
+  //
+  //     // email: "",
+  //     // emailHash: "",
+  //     // username: "",
+  //   };
+  // },
+  methods: {
+    debugAvatar() {
+      // console.log(emailHash);
+      // console.log(this.emailHash);
+    },
   },
-  methods: {},
   setup() {
     const myStore = useStore();
     const router = useRouter();
     const route = useRoute();
+    let username = ref("");
+    let email = ref("");
+    let emailHash = ref("empy");
     let tokenState = computed({
       // 相当于重写了返回值,参考 Kotlin
       set: (value) => {
@@ -110,10 +113,38 @@ export default {
         console.log("还没有登陆");
         router.push({ path: "/login" });
       }
+      // console.log("邮件哈希:", emailHash.value);
       // 获取用户信息填充 界面
+      axios.get("/api/v1/user/get").then((successResponse) => {
+        // 不要解码,因为已经解码过了
+        const responseResult = successResponse.data;
+        console.log(responseResult);
+        username.value = responseResult.data.username;
+        email.value = responseResult.data.email;
+        emailHash.value = md5(email.value);
+
+        // console.log("邮件哈希:", emailHash.value);
+      });
     });
     return {
       tokenState,
+      username,
+      email,
+      emailHash,
+      emH2: "12",
+      leftDrawerOpen: false,
+      links: [
+        {
+          icon: "web",
+          text: "项目管理",
+          target: "/projects",
+        },
+        {
+          icon: "person",
+          text: "问题追踪",
+          target: "/issues",
+        },
+      ],
     };
   },
 };

@@ -113,7 +113,9 @@ export default {
             path: "/",
           });
         })
-        .catch((failResponse) => {});
+        .catch((failResponse) => {
+          console.log(failResponse);
+        });
     },
     register() {
       let router = this.$router;

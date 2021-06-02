@@ -22,6 +22,7 @@
   },
   "devDependencies": {
     "@quasar/app": "^3.0.0-beta.1",
+    "@types/js-md5": "^0.4.2",
     "@types/node": "^10.17.15",
     "@typescript-eslint/eslint-plugin": "^4.16.1",
     "@typescript-eslint/parser": "^4.16.1",
@@ -29,7 +30,8 @@
     "babel-eslint": "^10.0.1",
     "eslint": "^7.14.0",
     "eslint-config-prettier": "^8.1.0",
-    "eslint-plugin-vue": "^7.0.0"
+    "eslint-plugin-vue": "^7.0.0",
+    "js-md5": "^0.7.3"
   },
   "browserslist": [
     "last 10 Chrome versions",
