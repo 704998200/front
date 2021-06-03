@@ -1,11 +1,5 @@
 <template>
   <div class="background">
-    <img
-      src="https://common-1251511762.cos.ap-guangzhou.myqcloud.com/R18/PCR/10.jpg"
-      width="100%"
-      height="100%"
-      alt=""
-    />
   </div>
   <div :class="'fixed-center'" class="q-pa-md" style="max-width: 400px">
     <span CLASS="KKK">项目管理追踪系统注册</span>
@@ -63,6 +57,8 @@
 </template>
 
 <style lang="sass">
+.q-gutter-md
+  background-color: #42b983
 .KKK
   position: relative
   left: 0rem
@@ -85,6 +81,7 @@
   width: 100%
   height: 100%
   z-index: -1
+  
 </style>
 
 <script>
