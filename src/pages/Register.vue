@@ -1,7 +1,12 @@
 <template>
-  <div class=background>
-    <img :src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F0383de658b94d9fa801219c770e747f.gif&refer=http%3A%2F%2Fimg.zcool.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1625294970&t=552edd7babf732eb9b99d13882d34f4f" width="100%" height="100%" alt="" />
-    </div>
+  <div class="background">
+    <img
+      src="https://common-1251511762.cos.ap-guangzhou.myqcloud.com/R18/PCR/10.jpg"
+      width="100%"
+      height="100%"
+      alt=""
+    />
+  </div>
   <div :class="'fixed-center'" class="q-pa-md" style="max-width: 400px">
     <span CLASS="KKK">项目管理追踪系统注册</span>
     <q-form action="" class="q-gutter-md">
@@ -44,7 +49,7 @@
       </q-input>
 
       <div>
-        <q-btn color="primary" label="提交" @click="Submit"/>
+        <q-btn color="primary" label="提交" @click="Submit" />
         <q-btn
           class="q-ml-sm"
           color="primary"
@@ -80,7 +85,6 @@
   width: 100%
   height: 100%
   z-index: -1
-
 </style>
 
 <script>
@@ -122,7 +126,7 @@ export default {
     },
     Login() {
       let router = this.router;
-      void router.push({path: "/login"});
+      void router.push({ path: "/login" });
     },
   },
 };

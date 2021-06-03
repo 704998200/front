@@ -1,7 +1,5 @@
 <template>
-  <div class=background>
-    <img :src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F0383de658b94d9fa801219c770e747f.gif&refer=http%3A%2F%2Fimg.zcool.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1625294970&t=552edd7babf732eb9b99d13882d34f4f" width="100%" height="100%" alt="" />
-    </div>
+  <div class="background"></div>
   <div :class="'fixed-center'" class="q-pa-md" style="max-width: 400px">
     <span class="KKK">项目管理追踪系统</span>
     <q-form action="" class="q-gutter-md">
@@ -59,11 +57,13 @@
   padding: 4px 16px
   margin: 4rem 0 1.5rem
   z-index: 1
+
 .background
-  position: absolute
+  position: fixed
   width: 100%
   height: 100%
   z-index: -1
+  background-image: url('https://common-1251511762.cos.ap-guangzhou.myqcloud.com/R18/1068697.jpg')
 </style>
 
 <script>
