@@ -1,7 +1,7 @@
 <template>
-  <div class="background">
-  </div>
-  <div :class="'fixed-center'" class="q-pa-md" style="max-width: 400px">
+  <div class="background"></div>
+  <div :class="'fixed-center'" class="q-pa-md"
+       style="max-width: 400px;background-color:  #C8C8C8;border:2px;border-radius:25px;">
     <span CLASS="KKK">项目管理追踪系统注册</span>
     <q-form action="" class="q-gutter-md">
       <q-input
@@ -57,8 +57,6 @@
 </template>
 
 <style lang="sass">
-.q-gutter-md
-  background-color: #42b983
 .KKK
   position: relative
   left: 0rem
@@ -82,7 +80,6 @@
   height: 100%
   z-index: -1
   background-image: url('https://common-1251511762.cos.ap-guangzhou.myqcloud.com/R18/1068697.jpg')
-
 </style>
 
 <script>

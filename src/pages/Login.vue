@@ -1,6 +1,7 @@
 <template>
   <div class="background"></div>
-  <div :class="'fixed-center'" class="q-pa-md" style="max-width: 400px">
+  <div :class="'fixed-center'" class="q-pa-md"
+       style="max-width: 400px;background-color:  #C8C8C8;border:2px;border-radius:25px;">
     <span class="KKK">项目管理追踪系统</span>
     <q-form action="" class="q-gutter-md">
       <q-input
@@ -128,7 +129,7 @@ export default {
     },
     register() {
       let router = this.$router;
-      void router.push({ path: "/regist" });
+      void router.push({path: "/register"});
     },
   },
 };
