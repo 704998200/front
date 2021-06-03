@@ -1,5 +1,5 @@
 <template>
-  <q-btn class="" color="primary" label="NEW" @click="newp = true" />
+  <q-btn class="" color="primary" label="新建" @click="newp = true" />
   <q-dialog v-model="newp">
     <q-card>
       <q-card-section>
@@ -21,8 +21,8 @@
         <div class="text-h6">创建新任务</div>
       </q-card-section>
       <q-form>
-        <div>
-          <q-btn color="primary" label="Submit" type="submit" />
+        <div class=submit-btn>
+          <q-btn color="primary" label="提交" type="submit" />
         </div>
       </q-form>
     </q-card>
