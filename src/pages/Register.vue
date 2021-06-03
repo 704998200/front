@@ -81,7 +81,8 @@
   width: 100%
   height: 100%
   z-index: -1
-  
+  background-image: url('https://common-1251511762.cos.ap-guangzhou.myqcloud.com/R18/1068697.jpg')
+
 </style>
 
 <script>
