@@ -74,6 +74,13 @@
   line-height: 2rem
   padding: 4px 16px
   margin: 4rem 0 1.5rem
+  z-index: 1
+.background
+  position: absolute
+  width: 100%
+  height: 100%
+  z-index: -1
+
 </style>
 
 <script>
