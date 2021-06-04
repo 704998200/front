@@ -1,7 +1,7 @@
 <template>
-  <q-btn color="primary" label="新建" @click="newp = true" style=" margin-left: 1%;margin-top: 1%"/>
+
   <q-dialog v-model="newp">
-    <q-card style="width: 600px;height: 800px;background-image: url('');">
+    <q-card style="width: 600px;height: 800px;">
       <q-card-section>
         <div class="text-h6 text-center ">创建新项目</div>
       </q-card-section>
@@ -21,70 +21,62 @@
                  style="margin-top: 20px;"/>
         <div>
           <q-btn style=" margin-left: 44%;margin-top: 30px;"
-                 color="primary" label="提交" type="submit"/>
+                 color="bg-secondary" label="提交" type="submit"/>
         </div>
       </q-form>
     </q-card>
   </q-dialog>
-  <q-dialog v-model="mangep">
-    <q-card>
-      <q-card-section>
-        <div class="text-h6">创建新任务</div>
-      </q-card-section>
-      <q-form>
-        <div class=submit-btn>
-          <q-btn color="primary" label="提交" type="submit"/>
-        </div>
-      </q-form>
-    </q-card>
-  </q-dialog>
+
   <div class="q-pa-md q-gutter-md">
+
+    <div class="row justify-between"></div>
     <q-table
-      title="项目列表"
       :rows="rows"
       :columns="columns"
       row-key="name"
+
     >
-
-      <template v-slot:header="props">
-        <q-tr :props="props">
-          <q-th auto-width/>
-          <q-th
-            v-for="col in props.cols"
-            :key="col.name"
-            :props="props"
-          >
-            {{ col.label }}
-          </q-th>
-        </q-tr>
+      <template v-slot:top="props">
+        <div class="col-2 q-table__title">项目</div>
+        <q-btn size="20px" style="margin-left: 75%" label="新建" @click="newp = true" class="bg-secondary text-white"/>
       </template>
 
-      <template v-slot:body="props">
-        <q-tr :props="props">
-          <q-td auto-width>
-            <q-btn size="sm" color="accent" round dense @click="props.expand = !props.expand"
-                   :icon="props.expand ? 'remove' : 'add'"/>
-          </q-td>
-          <q-td
-            v-for="col in props.cols"
-            :key="col.name"
-            :props="props"
-          >
-            {{ col.value }}
-          </q-td>
-        </q-tr>
-        <q-tr v-show="props.expand" :props="props">
-          <q-td colspan="100%">
-            <div class="text-left">任务内容: {{ props.row.projectDescription }}</div>
-          </q-td>
-        </q-tr>
+      <template v-slot:body-cell-任务内容="props">
+        <q-td :props="props">
+          <q-btn dense round flat color="grey" @click="showDescription(props)" icon="edit"></q-btn>
+        </q-td>
       </template>
+
+      <template v-slot:body-cell-actions="props">
+        <q-td :props="props">
+          <q-btn dense round flat color="grey" @click="editRow(props)" icon="edit"></q-btn>
+          <q-btn dense round flat color="grey" @click="deleteRow(props)" icon="delete"></q-btn>
+        </q-td>
+      </template>
+
     </q-table>
+  </div>
+  <div>
+    <q-card class="my-card" style="margin-left: 1%; width: 98%">
+      <q-parallax
+        :speed="1"
+        src="https://cdn.quasar.dev/img/parallax1.jpg"
+        :height="250"
+      >
+      </q-parallax>
+      <q-card-section>
+        <div class="text-h4  text-black">{{ curprojectName }}</div>
+      </q-card-section>
+      <q-separator/>
+      <q-card-actions>
+        <div style="width:100%;word-wrap:break-word" class="text-body1  text-black">{{ curprojectDescription }}</div>
+      </q-card-actions>
+    </q-card>
   </div>
 </template>
 
 <script>
-import {ref} from "vue";
+import {ref} from 'vue'
 
 const columns = [
   {
@@ -95,21 +87,50 @@ const columns = [
     field: row => row.projectShortId,
     sortable: true,
   },
-  {name: 'name', align: 'center', label: '项目名称', field: 'projectName'},
+  {name: 'iname', align: 'center', label: '项目名称', field: 'projectName'},
   {name: 'Admin', label: '负责人', field: 'projectAdmin'},
   {name: 'Budget', label: '预算', field: 'projectBudget', sortable: true,},
   {name: 'ScheduledStartDate', label: '计划开始', field: 'projectScheduledStartDate', sortable: true},
   {name: 'ScheduledFinshDate', label: '计划完成', field: 'projectScheduledFinshDate', sortable: true,},
+  {name: '任务内容', label: '任务内容'},
+  {name: 'actions', label: ''},
 ];
 const rows = [
   {
     projectShortId: '1',
     projectName: '2',
-    projectAdmin: 159,
+    projectAdmin: 1829,
     projectBudget: 6.0,
     projectScheduledStartDate: '2000/03/20',
     projectScheduledFinshDate: '2045/04/20',
-    projectDescription: 87,
+    projectDescription: '8754687546875468754687546875468754687548754687546875468754875468754687546875487546875468754687548754687546875468754875468754687546875487546875468754687548754687546875468754875468754687546875487546875468754687548754687546875468754875468754687546875487546875468754687548754687546875468754875468754687546875487546875468754687548754687546875468754875468754687546875487546875468754687548754687546875468754687546875468754687546875468754687546875468754687546875468754687546875468754687546875468754687546875468754687546875468754687546875468754687546875468754687546875468754687546875468754687546875468754687546',
+  },
+  {
+    projectShortId: '1',
+    projectName: '2',
+    projectAdmin: 154569,
+    projectBudget: 6.0,
+    projectScheduledStartDate: '2000/03/20',
+    projectScheduledFinshDate: '2045/04/20',
+    projectDescription: 87546,
+  },
+  {
+    projectShortId: '1',
+    projectName: '2',
+    projectAdmin: 1549,
+    projectBudget: 6.0,
+    projectScheduledStartDate: '2000/03/20',
+    projectScheduledFinshDate: '2045/04/20',
+    projectDescription: 87546,
+  },
+  {
+    projectShortId: '1',
+    projectName: '2',
+    projectAdmin: 1549,
+    projectBudget: 6.0,
+    projectScheduledStartDate: '2000/03/20',
+    projectScheduledFinshDate: '2045/04/20',
+    projectDescription: 87546,
   },
   {
     projectShortId: '1',
@@ -133,28 +154,58 @@ const rows = [
 ]
 export default {
   setup() {
-    let projectName = null;
-    let projectShortId = null;
-    let projectDescription = null;
-    let projectBudget = null;
-    let projectScheduledStartDate = null;
-    let projectScheduledFinshDate = null;
+    let projectName = ref("");
+    let projectShortId = ref("");
+    let projectDescription = ref("");
+    let projectBudget = ref("");
+    let projectAdmin = ref("");
+    let projectScheduledStartDate = ref("");
+    let projectScheduledFinshDate = ref("");
+    let curprojectName = ref("");
+    let curprojectShortId = ref("");
+    let curprojectDescription = ref("");
+    let curprojectBudget = ref("");
+    let curprojectAdmin = ref("");
+    let curprojectScheduledStartDate = ref("");
+    let curprojectScheduledFinshDate = ref("");
     return {
       newp: ref(false),
-      mangep: ref(false),
-      leftDrawerOpen: false,
-      search: "",
       projectName,
+      projectAdmin,
       projectBudget,
       projectScheduledStartDate,
       projectScheduledFinshDate,
       projectShortId,
       projectDescription,
+      curprojectName,
+      curprojectAdmin,
+      curprojectBudget,
+      curprojectScheduledStartDate,
+      curprojectScheduledFinshDate,
+      curprojectShortId,
+      curprojectDescription,
       columns,
       rows,
+
     };
   },
+  methods: {
+    editRow(props) {
+      console.log(props.row);
 
-  methods: {},
+    },
+    deleteRow(props) {
+      console.log(props.row)
+    },
+    showDescription(props) {
+      this.curprojectName = props.row.projectName;
+      this.curprojectAdmin = props.row.projectAdmin;
+      this.curprojectDescription = props.row.projectDescription;
+
+    }
+  },
 };
 </script>
+<style>
+
+</style>

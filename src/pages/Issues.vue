@@ -26,6 +26,24 @@
     </q-drawer>
     <q-page-container>
       <q-page>
+
+        <div class="q-pa-md" style="width:100% ;max-height: 50%">
+          <q-list bordered separator>
+            <q-item clickable v-ripple v-for="link in links">
+              <q-item-section avatar top>
+                <q-avatar icon="folder" color="primary" text-color="white"/>
+              </q-item-section>
+              <q-item-section>
+                <q-item-label lines="1">{{ link.text }}</q-item-label>
+                <q-item-label caption>February 22nd, 2019</q-item-label>
+              </q-item-section>
+              <q-item-section side>
+                <q-icon name="info" color="green"/>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </div>
+
         <div class="comments-outside">
           <div class="comments-header">
             <div class="post-owner">
@@ -53,6 +71,39 @@ export default {
   name: "userbugmange",
   setup() {
     return {
+      links: [
+        {
+          text: "项目管理",
+        },
+        {
+          text: "项目管理",
+        },
+        {
+          text: "项目管理",
+        },
+        {
+          text: "项目管理",
+        },
+        {
+          text: "项目管理",
+        },
+        {
+          text: "项目管理",
+        },
+        {
+          text: "项目管理",
+        },
+        {
+          text: "项目管理",
+        },
+        {
+          icon: "person",
+          text: "问题追踪",
+          target: "/issues",
+          color: "grey",
+          status: "close"
+        },
+      ],
       links2: [
         {
           icon: "web",
