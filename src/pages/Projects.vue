@@ -17,7 +17,7 @@
                  style="margin-top: 20px;"/>
         <div>
           <q-btn style=" margin-left: 44%;margin-top: 30px;"
-                 text-color="black" label="提交" @click="newproject()"/>
+                 text-color="black" label="提交" @click="newProject()"/>
         </div>
       </q-form>
     </q-card>
@@ -100,7 +100,6 @@ export default {
     let projectName = ref("");
     let projectShortId = ref("");
     let projectDescription = ref("");
-    let projectCreator = ref("");
     let projectScheduledStartDate = ref("");
     let projectScheduledFinshDate = ref("");
     let curprojectId = ref("")
@@ -148,7 +147,7 @@ export default {
     };
   },
   methods: {
-    newproject() {
+    newProject() {
       let projectDescription = this.projectDescription;
       let projectShortId = this.projectShortId;
       let projectName = this.projectName;
