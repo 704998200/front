@@ -66,10 +66,13 @@
 
 <script>
 import Comments from '../components/Comments.vue'
+import {onMounted} from "vue";
+import {axios} from "../boot/axios";
 
 export default {
   name: "userbugmange",
   setup() {
+
     return {
       links: [
         {
@@ -96,13 +99,6 @@ export default {
         {
           text: "项目管理",
         },
-        {
-          icon: "person",
-          text: "问题追踪",
-          target: "/issues",
-          color: "grey",
-          status: "close"
-        },
       ],
       links2: [
         {
@@ -128,6 +124,7 @@ export default {
   components: {
     "Comments": Comments
   },
+
   methods: {
     submitComment: function (reply) {
       this.comments.push({

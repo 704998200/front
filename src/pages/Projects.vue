@@ -9,10 +9,6 @@
         <q-input color="blue-11" square filled v-model="projectShortId" label="短ID *" style="margin-top: 10px;"/>
         <q-input color="blue-11" square filled v-model="projectName" label="项目名称 *"
                  style="margin-top: 20px;"/>
-        <q-input color="blue-11" square filled v-model="projectAdmin" label="负责人 *"
-                 style="margin-top: 20px;"/>
-        <q-input type="number" color="blue-11" square filled v-model="projectBudget" label="预算(RMB) *"
-                 style="margin-top: 20px;"/>
         <q-input type="Native date" color="blue-11" square filled v-model="projectScheduledStartDate" label="计划开始 *"
                  style="margin-top: 20px;"/>
         <q-input type="Native date" color="blue-11" square filled v-model="projectScheduledFinshDate" label="计划完成 *"
@@ -21,7 +17,7 @@
                  style="margin-top: 20px;"/>
         <div>
           <q-btn style=" margin-left: 44%;margin-top: 30px;"
-                 color="bg-secondary" label="提交" type="submit"/>
+                 text-color="black" label="提交" @click="newproject()"/>
         </div>
       </q-form>
     </q-card>
@@ -43,7 +39,7 @@
 
       <template v-slot:body-cell-任务内容="props">
         <q-td :props="props">
-          <q-btn dense round flat color="grey" @click="showDescription(props)" icon="edit"></q-btn>
+          <q-btn dense round flat color="grey" @click="showDescription(props)" icon="lightbulb_outline"></q-btn>
         </q-td>
       </template>
 
@@ -76,7 +72,8 @@
 </template>
 
 <script>
-import {ref} from 'vue'
+import {onMounted, ref} from 'vue'
+import {axios} from "../boot/axios";
 
 const columns = [
   {
@@ -84,112 +81,102 @@ const columns = [
     required: true,
     label: 'id',
     align: 'center',
-    field: row => row.projectShortId,
+    field: row => row.projectId,
     sortable: true,
   },
-  {name: 'iname', align: 'center', label: '项目名称', field: 'projectName'},
-  {name: 'Admin', label: '负责人', field: 'projectAdmin'},
-  {name: 'Budget', label: '预算', field: 'projectBudget', sortable: true,},
+  {name: 'name', align: 'center', label: '项目名称', field: 'projectName'},
+  {name: 'ShortId', label: '短Id', field: 'projectShortId'},
+  {name: 'Creator', label: '创建人', field: 'projectCreator'},
   {name: 'ScheduledStartDate', label: '计划开始', field: 'projectScheduledStartDate', sortable: true},
   {name: 'ScheduledFinshDate', label: '计划完成', field: 'projectScheduledFinshDate', sortable: true,},
   {name: '任务内容', label: '任务内容'},
   {name: 'actions', label: ''},
 ];
-const rows = [
-  {
-    projectShortId: '1',
-    projectName: '2',
-    projectAdmin: 1829,
-    projectBudget: 6.0,
-    projectScheduledStartDate: '2000/03/20',
-    projectScheduledFinshDate: '2045/04/20',
-    projectDescription: '8754687546875468754687546875468754687548754687546875468754875468754687546875487546875468754687548754687546875468754875468754687546875487546875468754687548754687546875468754875468754687546875487546875468754687548754687546875468754875468754687546875487546875468754687548754687546875468754875468754687546875487546875468754687548754687546875468754875468754687546875487546875468754687548754687546875468754687546875468754687546875468754687546875468754687546875468754687546875468754687546875468754687546875468754687546875468754687546875468754687546875468754687546875468754687546875468754687546875468754687546',
-  },
-  {
-    projectShortId: '1',
-    projectName: '2',
-    projectAdmin: 154569,
-    projectBudget: 6.0,
-    projectScheduledStartDate: '2000/03/20',
-    projectScheduledFinshDate: '2045/04/20',
-    projectDescription: 87546,
-  },
-  {
-    projectShortId: '1',
-    projectName: '2',
-    projectAdmin: 1549,
-    projectBudget: 6.0,
-    projectScheduledStartDate: '2000/03/20',
-    projectScheduledFinshDate: '2045/04/20',
-    projectDescription: 87546,
-  },
-  {
-    projectShortId: '1',
-    projectName: '2',
-    projectAdmin: 1549,
-    projectBudget: 6.0,
-    projectScheduledStartDate: '2000/03/20',
-    projectScheduledFinshDate: '2045/04/20',
-    projectDescription: 87546,
-  },
-  {
-    projectShortId: '1',
-    projectName: '2',
-    projectAdmin: 159,
-    projectBudget: 6.0,
-    projectScheduledStartDate: '1977/03/20',
-    projectScheduledFinshDate: '2045/12/20',
-    projectDescription: 87,
-  },
-  {
-    projectShortId: '1',
-    projectName: '2',
-    projectAdmin: 159,
-    projectBudget: 6.0,
-    projectScheduledStartDate: '1977/05/20',
-    projectScheduledFinshDate: '2066/03/20',
-    projectDescription: 87,
-  },
 
-]
 export default {
   setup() {
+    let rows = ref([])
+    let projectId = ref("")
     let projectName = ref("");
     let projectShortId = ref("");
     let projectDescription = ref("");
-    let projectBudget = ref("");
-    let projectAdmin = ref("");
+    let projectCreator = ref("");
     let projectScheduledStartDate = ref("");
     let projectScheduledFinshDate = ref("");
+    let curprojectId = ref("")
     let curprojectName = ref("");
     let curprojectShortId = ref("");
     let curprojectDescription = ref("");
-    let curprojectBudget = ref("");
-    let curprojectAdmin = ref("");
+    let curprojectCreator = ref("");
     let curprojectScheduledStartDate = ref("");
     let curprojectScheduledFinshDate = ref("");
+    onMounted(() => {
+      axios.get("/api/v1/project/getAll").then((successResponse) => {
+        const responseResult = successResponse.data.data;
+        console.log(responseResult);
+        responseResult.forEach(function (item) {
+          const project = {
+            projectId,
+            projectName,
+            projectShortId,
+            projectCreator,
+            projectDescription,
+            projectScheduledStartDate,
+            projectScheduledFinshDate
+          };
+          project.projectName = item.projectName;
+          project.projectShortId = item.projectShortId;
+          project.projectId = item.id;
+          project.projectDescription = item.projectDescription;
+          project.projectScheduledStartDate = item.startedTime;
+          project.projectScheduledFinshDate = item.updatedTime;
+          project.projectCreator = item.postedBy.username;
+          rows.value.push(project);
+        })
+        console.log(rows);
+      });
+    });
     return {
       newp: ref(false),
       projectName,
-      projectAdmin,
-      projectBudget,
       projectScheduledStartDate,
       projectScheduledFinshDate,
       projectShortId,
+      projectId,
       projectDescription,
+      curprojectId,
       curprojectName,
-      curprojectAdmin,
-      curprojectBudget,
+      curprojectCreator,
       curprojectScheduledStartDate,
       curprojectScheduledFinshDate,
       curprojectShortId,
       curprojectDescription,
       columns,
       rows,
-
     };
   },
   methods: {
+    newproject() {
+      let projectDescription = this.projectDescription;
+      let projectShortId = this.projectShortId;
+      let projectName = this.projectName;
+      let projectScheduledStartDate = this.projectScheduledStartDate;
+      let projectScheduledFinshDate = this.projectScheduledFinshDate;
+      axios
+        .post("/api/v1/project/new", {
+          projectName,
+          projectShortId,
+          projectScheduledStartDate,
+          projectScheduledFinshDate,
+          projectDescription,
+        })
+        .then((successResponse) => {
+
+        })
+        .catch((failResponse) => {
+          console.log(failResponse);
+        });
+    },
     editRow(props) {
       console.log(props.row);
 
@@ -199,11 +186,11 @@ export default {
     },
     showDescription(props) {
       this.curprojectName = props.row.projectName;
-      this.curprojectAdmin = props.row.projectAdmin;
       this.curprojectDescription = props.row.projectDescription;
 
     }
   },
+
 };
 </script>
 <style>
