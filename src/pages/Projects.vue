@@ -115,15 +115,7 @@ export default {
         const responseResult = successResponse.data.data;
         console.log(responseResult);
         responseResult.forEach(function (item) {
-          const project = {
-            projectId,
-            projectName,
-            projectShortId,
-            projectCreator,
-            projectDescription,
-            projectScheduledStartDate,
-            projectScheduledFinshDate
-          };
+          const project = {};
           project.projectName = item.projectName;
           project.projectShortId = item.projectShortId;
           project.projectId = item.id;

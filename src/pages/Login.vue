@@ -84,7 +84,6 @@ export default {
   },
   setup() {
     const router = useRouter();
-    const $q = useQuasar();
     const myStore = useStore();
     let tokenState = computed({
       // 相当于重写了返回值,参考 Kotlin

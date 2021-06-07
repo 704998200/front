@@ -24,14 +24,31 @@
           <q-space/>
           <q-space/>
           <div class="q-gutter-sm row items-center no-wrap">
-            <q-btn flat round>
-              <q-avatar :class="'float-right'" size="30px">
-                <img
-                  :src="`https://www.gravatar.com/avatar/${emailHash}?s=128&d=mm&r=g`"
-                />
-              </q-avatar>
-              <q-tooltip>{{ username }}</q-tooltip>
-            </q-btn>
+            <q-btn-group rounded>
+              <q-btn>
+                <q-avatar :class="'float-right'" size="30px">
+                  <img
+                    :src="`https://www.gravatar.com/avatar/${emailHash}?s=128&d=mm&r=g`"
+                  />
+                </q-avatar>
+                <q-tooltip>
+                  <div> {{ username }}</div>
+                </q-tooltip>
+              </q-btn>
+              <q-btn-dropdown rounded auto-close>
+                <q-list>
+                  <q-item clickable v-close-popup @click="logout()">
+
+                    <q-item-section>
+                      <q-item-label>登出</q-item-label>
+                    </q-item-section>
+                  </q-item>
+
+                </q-list>
+              </q-btn-dropdown>
+
+
+            </q-btn-group>
           </div>
         </q-toolbar>
       </div>
@@ -85,6 +102,9 @@ export default {
       // console.log(emailHash);
       // console.log(this.emailHash);
     },
+    logout() {
+      //
+    }
   },
   setup() {
     const myStore = useStore();

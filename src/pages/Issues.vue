@@ -10,15 +10,13 @@
         <q-list class="text-grey-8" padding>
           <q-item
             v-for="link in links2"
-            :key="link.text"
+            :key="link.projectName"
             v-ripple
             clickable
           >
-            <q-item-section avatar>
-              <q-chip :color="link.color" icon="bookmark">{{ link.status }}</q-chip>
-            </q-item-section>
+
             <q-item-section>
-              <q-item-label>{{ link.text }}</q-item-label>
+              <q-item-label>{{ link.projectName }}</q-item-label>
             </q-item-section>
           </q-item>
         </q-list>
@@ -37,8 +35,8 @@
                 <q-item-label lines="1">{{ link.text }}</q-item-label>
                 <q-item-label caption>February 22nd, 2019</q-item-label>
               </q-item-section>
-              <q-item-section side>
-                <q-icon name="info" color="green"/>
+              <q-item-section avatar>
+                <q-chip :color="link.color" icon="bookmark">{{ link.status }}</q-chip>
               </q-item-section>
             </q-item>
           </q-list>
@@ -66,17 +64,30 @@
 
 <script>
 import Comments from '../components/Comments.vue'
-import {onMounted} from "vue";
+import {onMounted, ref} from "vue";
 import {axios} from "../boot/axios";
 
 export default {
-  name: "userbugmange",
+  name: "Issues",
   setup() {
-
+    let links2 = ref([]);
+    onMounted(() => {
+      axios.get("/api/v1/project/getAll").then((successResponse) => {
+        const responseResult = successResponse.data.data;
+        responseResult.forEach(function (item) {
+          const project = {};
+          project.projectName = item.projectName;
+          project.projectId = item.id;
+          links2.value.push(project);
+        })
+        console.log(links2);
+      });
+    });
     return {
       links: [
         {
           text: "项目管理",
+          status: "open",
         },
         {
           text: "项目管理",
@@ -100,22 +111,7 @@ export default {
           text: "项目管理",
         },
       ],
-      links2: [
-        {
-          icon: "web",
-          text: "项目管理",
-          target: "/projects",
-          color: "green",
-          status: "open"
-        },
-        {
-          icon: "person",
-          text: "问题追踪",
-          target: "/issues",
-          color: "grey",
-          status: "close"
-        },
-      ],
+      links2,
       comments,
       creator,
       current_user
