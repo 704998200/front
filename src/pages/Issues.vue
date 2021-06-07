@@ -1,22 +1,17 @@
 <template>
   <q-layout class="bg-grey-1" view="hHh lpR fFf">
-    <q-drawer
-      :width="400"
-      bordered
-      content-class="bg-white"
-      show-if-above
-    >
+    <q-drawer :width="400" bordered content-class="bg-white" show-if-above>
       <q-scroll-area class="fit">
         <q-list class="text-grey-8" padding>
           <q-item
-            v-for="link in links2"
-            :key="link.projectName"
+            v-for="project in projects"
+            :key="project.projectName"
             v-ripple
             clickable
+            @click="getProjectIssues(project)"
           >
-
             <q-item-section>
-              <q-item-label>{{ link.projectName }}</q-item-label>
+              <q-item-label>{{ project.projectName }}</q-item-label>
             </q-item-section>
           </q-item>
         </q-list>
@@ -24,19 +19,20 @@
     </q-drawer>
     <q-page-container>
       <q-page>
-
-        <div class="q-pa-md" style="width:100% ;max-height: 50%">
+        <div class="q-pa-md" style="width: 100%; max-height: 50%">
           <q-list bordered separator>
             <q-item clickable v-ripple v-for="link in links">
               <q-item-section avatar top>
-                <q-avatar icon="folder" color="primary" text-color="white"/>
+                <q-avatar icon="folder" color="primary" text-color="white" />
               </q-item-section>
               <q-item-section>
                 <q-item-label lines="1">{{ link.text }}</q-item-label>
                 <q-item-label caption>February 22nd, 2019</q-item-label>
               </q-item-section>
               <q-item-section avatar>
-                <q-chip :color="link.color" icon="bookmark">{{ link.status }}</q-chip>
+                <q-chip :color="link.color" icon="bookmark"
+                  >{{ link.status }}
+                </q-chip>
               </q-item-section>
             </q-item>
           </q-list>
@@ -63,14 +59,14 @@
 </template>
 
 <script>
-import Comments from '../components/Comments.vue'
-import {onMounted, ref} from "vue";
-import {axios} from "../boot/axios";
+import Comments from "../components/Comments.vue";
+import { onMounted, ref } from "vue";
+import { axios } from "../boot/axios";
 
 export default {
   name: "Issues",
   setup() {
-    let links2 = ref([]);
+    let projects = ref([]);
     onMounted(() => {
       axios.get("/api/v1/project/getAll").then((successResponse) => {
         const responseResult = successResponse.data.data;
@@ -78,9 +74,9 @@ export default {
           const project = {};
           project.projectName = item.projectName;
           project.projectId = item.id;
-          links2.value.push(project);
-        })
-        console.log(links2);
+          projects.value.push(project);
+        });
+        console.log(projects);
       });
     });
     return {
@@ -111,57 +107,61 @@ export default {
           text: "项目管理",
         },
       ],
-      links2,
+      projects,
       comments,
       creator,
-      current_user
-    }
+      current_user,
+    };
   },
   components: {
-    "Comments": Comments
+    Comments: Comments,
   },
 
   methods: {
-    submitComment: function (reply) {
+    submitComment(reply) {
       this.comments.push({
         id: this.comments.length + 1,
         user: this.current_user.user,
         avatar: this.current_user.avatar,
-        text: reply
+        text: reply,
       });
-    }
-  }
-}
+    },
+    getProjectIssues(project) {
+      console.log(project);
+      let projectId = project.projectId;
+      // TODO 此时可以调用 Axios
+    },
+  },
+};
 //修改模板
 const comments = [
   {
     id: 1,
-    user: 'example',
-    avatar: 'http://via.placeholder.com/100x100/a74848',
-    text: 'lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor ',
+    user: "example",
+    avatar: "http://via.placeholder.com/100x100/a74848",
+    text: "lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor ",
   },
   {
     id: 2,
-    user: 'example1',
-    avatar: 'http://via.placeholder.com/100x100/2d58a7',
-    text: 'lorem ipsum dolor',
+    user: "example1",
+    avatar: "http://via.placeholder.com/100x100/2d58a7",
+    text: "lorem ipsum dolor",
   },
   {
     id: 3,
-    user: 'example2',
-    avatar: 'http://via.placeholder.com/100x100/36846e',
-    text: 'lorem ipsum dolor again',
+    user: "example2",
+    avatar: "http://via.placeholder.com/100x100/36846e",
+    text: "lorem ipsum dolor again",
   },
-]
+];
 const creator = {
-  avatar: 'http://via.placeholder.com/100x100/a74848',
-  user: 'exampleCreator'
-}
+  avatar: "http://via.placeholder.com/100x100/a74848",
+  user: "exampleCreator",
+};
 const current_user = {
-  avatar: 'http://via.placeholder.com/100x100/a74848',
-  user: 'exampler'
-}
-
+  avatar: "http://via.placeholder.com/100x100/a74848",
+  user: "exampler",
+};
 </script>
 
 <style scoped>
@@ -181,11 +181,10 @@ hr {
 .comments-outside {
   box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
   margin: 0 auto;
-
 }
 
 .comments-header {
-  background-color: #C8C8C8;
+  background-color: #c8c8c8;
   padding: 10px;
   align-items: center;
   display: flex;
