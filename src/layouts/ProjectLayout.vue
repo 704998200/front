@@ -1,7 +1,7 @@
 <template>
   <q-layout class="bg-grey-1" view="hHh lpR fFf">
     <q-header class="bg-white text-grey-8" elevated height-hint="64">
-      <div style=" float:left">
+      <div style="float: left">
         <q-toolbar class="">
           <q-btn
             aria-label="Menu"
@@ -21,8 +21,8 @@
             <span>项目管理追踪系统</span>
             <!--          <span>{{ tokenState }}</span>-->
           </q-toolbar-title>
-          <q-space/>
-          <q-space/>
+          <q-space />
+          <q-space />
           <div class="q-gutter-sm row items-center no-wrap">
             <q-btn-group rounded>
               <q-btn>
@@ -32,27 +32,22 @@
                   />
                 </q-avatar>
                 <q-tooltip>
-                  <div> {{ username }}</div>
+                  <div>{{ username }}</div>
                 </q-tooltip>
               </q-btn>
               <q-btn-dropdown rounded auto-close>
                 <q-list>
                   <q-item clickable v-close-popup @click="logout()">
-
                     <q-item-section>
                       <q-item-label>登出</q-item-label>
                     </q-item-section>
                   </q-item>
-
                 </q-list>
               </q-btn-dropdown>
-
-
             </q-btn-group>
           </div>
         </q-toolbar>
       </div>
-
     </q-header>
 
     <q-drawer
@@ -72,7 +67,7 @@
             :to="link.target"
           >
             <q-item-section avatar>
-              <q-icon :name="link.icon"/>
+              <q-icon :name="link.icon" />
             </q-item-section>
             <q-item-section>
               <q-item-label>{{ link.text }}</q-item-label>
@@ -83,16 +78,16 @@
     </q-drawer>
 
     <q-page-container>
-      <router-view/>
+      <router-view />
     </q-page-container>
   </q-layout>
 </template>
 
-<script lang="ts">
-import {computed, onMounted, ref} from "vue";
-import {useStore} from "vuex";
-import {useRoute, useRouter} from "vue-router";
-import {axios} from "boot/axios";
+<script lang="js">
+import { computed, onMounted, ref } from "vue";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
+import { axios } from "boot/axios";
 
 const md5 = require("js-md5");
 export default {
@@ -103,7 +98,8 @@ export default {
       // console.log(this.emailHash);
     },
     logout() {
-      //
+      this.tokenState = "";
+      this.router.push({ path: "/login" });
     }
   },
   setup() {
@@ -119,14 +115,14 @@ export default {
         console.log("刷新 token");
         myStore.commit("token/setBearerToken", value);
       },
-      get: () => myStore.state.token.bearerToken,
+      get: () => myStore.state.token.bearerToken
     });
     onMounted(() => {
       console.log(tokenState);
       if (tokenState.value == "") {
         // 说明还没有准备 Token,自然就是去登陆
         console.log("还没有登陆");
-        router.push({path: "/login"});
+        router.push({ path: "/login" });
       }
       // console.log("邮件哈希:", emailHash.value);
       // 获取用户信息填充 界面
@@ -147,22 +143,23 @@ export default {
       username,
       email,
       emailHash,
+      router,
       emH2: "12",
       leftDrawerOpen: ref(true),
       links: [
         {
           icon: "web",
           text: "项目管理",
-          target: "/projects",
+          target: "/projects"
         },
         {
           icon: "person",
           text: "问题追踪",
-          target: "/issues",
-        },
-      ],
+          target: "/issues"
+        }
+      ]
     };
-  },
+  }
 };
 </script>
 
