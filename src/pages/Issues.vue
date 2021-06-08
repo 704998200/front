@@ -27,13 +27,22 @@
               </q-item-section>
               <q-item-section>
                 <q-item-label lines="1">{{ link.text }}</q-item-label>
-                <q-item-label caption>February 22nd, 2019</q-item-label>
+                <q-item-label caption>{{ link.issueUpdateTime }}</q-item-label>
+                <q-item-label caption>{{ link.issueCreateTime }}</q-item-label>
               </q-item-section>
               <q-item-section avatar>
-                <q-chip :color="link.color" icon="bookmark"
-                  >{{ link.status }}
+                <q-chip :color='(link.status==="open")?"green":"red"' icon="bookmark"
+                >{{ link.status }}
                 </q-chip>
               </q-item-section>
+              <q-btn
+                dense
+                round
+                flat
+                color="grey"
+                @click="deleteIssue()"
+                icon="delete"
+              ></q-btn>
             </q-item>
           </q-list>
         </div>
@@ -82,11 +91,15 @@ export default {
     return {
       links: [
         {
-          text: "项目管理",
+          issueTitle: "项目管理",
+          issueContent: "1321321",
+          issueUpdateTime: "5464564564",
+          issueCreateTime: "456456456",
           status: "open",
         },
         {
-          text: "项目管理",
+          text: "66管理",
+          status: "close",
         },
         {
           text: "项目管理",
@@ -131,6 +144,9 @@ export default {
       let projectId = project.projectId;
       // TODO 此时可以调用 Axios
     },
+    deleteIssue() {
+      //TODO
+    }
   },
 };
 //修改模板

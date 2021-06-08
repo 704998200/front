@@ -22,21 +22,21 @@
           style="margin-top: 20px"
         />
         <q-input
-          type="Native date"
+          type="date"
           color="blue-11"
           square
           filled
           v-model="projectScheduledStartDate"
-          label="计划开始 *"
+          hint="计划开始 *"
           style="margin-top: 20px"
         />
         <q-input
-          type="Native date"
+          type="date"
           color="blue-11"
           square
           filled
-          v-model="projectScheduledFinshDate"
-          label="计划完成 *"
+          v-model="projectScheduledFinishDate"
+          hint="计划完成 *"
           style="margin-top: 20px"
         />
         <q-input
@@ -118,7 +118,7 @@
       >
       </q-parallax>
       <q-card-section>
-        <div class="text-h4 text-black">{{ curprojectName }}</div>
+        <div class="text-h4 text-black">{{ curProjectName }}</div>
       </q-card-section>
       <q-separator />
       <q-card-actions>
@@ -126,7 +126,7 @@
           style="width: 100%; word-wrap: break-word"
           class="text-body1 text-black"
         >
-          {{ curprojectDescription }}
+          {{ curProjectDescription }}
         </div>
       </q-card-actions>
     </q-card>
@@ -157,9 +157,9 @@ const columns = [
     sortable: true,
   },
   {
-    name: "ScheduledFinshDate",
+    name: "ScheduledFinishDate",
     label: "计划完成",
-    field: "projectScheduledFinshDate",
+    field: "projectScheduledFinishDate",
     sortable: true,
   },
   { name: "任务内容", label: "任务内容" },
@@ -176,15 +176,13 @@ export default {
     let projectDescription = ref("");
     let projectScheduledStartDate = ref("");
     let projectScheduledFinishDate = ref("");
-    // TODO 回去修改这里命名
-
     let curProjectId = ref("");
-    let curprojectName = ref("");
-    let curprojectShortId = ref("");
-    let curprojectDescription = ref("");
-    let curprojectCreator = ref("");
-    let curprojectScheduledStartDate = ref("");
-    let curprojectScheduledFinshDate = ref("");
+    let curProjectName = ref("");
+    let curProjectShortId = ref("");
+    let curProjectDescription = ref("");
+    let curProjectCreator = ref("");
+    let curProjectScheduledStartDate = ref("");
+    let curProjectScheduledFinishDate = ref("");
     onMounted(() => {
       axios.get("/api/v1/project/getAll").then((successResponse) => {
         const responseResult = successResponse.data.data;
@@ -196,7 +194,7 @@ export default {
           project.projectId = item.id;
           project.projectDescription = item.projectDescription;
           project.projectScheduledStartDate = item.startedTime;
-          project.projectScheduledFinshDate = item.updatedTime;
+          project.projectScheduledFinishDate = item.endedTime;
           project.projectCreator = item.postedBy.username;
           rows.value.push(project);
         });
@@ -212,12 +210,12 @@ export default {
       projectId,
       projectDescription,
       curProjectId,
-      curprojectName,
-      curprojectCreator,
-      curprojectScheduledStartDate,
-      curprojectScheduledFinshDate,
-      curprojectShortId,
-      curprojectDescription,
+      curProjectName,
+      curProjectCreator,
+      curProjectScheduledStartDate,
+      curProjectScheduledFinishDate,
+      curProjectShortId,
+      curProjectDescription,
       columns,
       rows,
       router,
@@ -225,11 +223,12 @@ export default {
   },
   methods: {
     newProject() {
+      //TODO
       let projectDescription = this.projectDescription;
       let projectShortId = this.projectShortId;
       let projectName = this.projectName;
       let projectScheduledStartDate = this.projectScheduledStartDate;
-      let projectScheduledFinishDate = this.projectScheduledFinshDate;
+      let projectScheduledFinishDate = this.projectScheduledFinishDate;
       axios
         .post("/api/v1/project/new", {
           name: projectName,
@@ -244,17 +243,21 @@ export default {
         });
     },
     openProject(props) {
-      // TODO 写一个 Axios 获取新人物
       let projectId = props.row.projectId;
       console.log(projectId);
-      this.router.push({ path: `/projects/${projectId}` });
+      this.router.push({
+        path: `/projects/projectInfo`, query: {
+          id: projectId
+        }
+      });
     },
     deleteProject(props) {
+      //TODO
       console.log(props.row);
     },
     showDescription(props) {
-      this.curprojectName = props.row.projectName;
-      this.curprojectDescription = props.row.projectDescription;
+      this.curProjectName = props.row.projectName;
+      this.curProjectDescription = props.row.projectDescription;
     },
   },
 };
