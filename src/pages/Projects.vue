@@ -1,5 +1,5 @@
 <template>
-  <q-dialog v-model="newp">
+  <q-dialog v-model="newProjectBtn">
     <q-card style="width: 600px; height: 800px">
       <q-card-section>
         <div class="text-h6 text-center">创建新项目</div>
@@ -9,7 +9,7 @@
           color="blue-11"
           square
           filled
-          v-model="projectShortId"
+          v-model="newProjectInfo.projectShortId"
           label="短ID *"
           style="margin-top: 10px"
         />
@@ -17,7 +17,7 @@
           color="blue-11"
           square
           filled
-          v-model="projectName"
+          v-model="newProjectInfo.projectName"
           label="项目名称 *"
           style="margin-top: 20px"
         />
@@ -26,7 +26,7 @@
           color="blue-11"
           square
           filled
-          v-model="projectScheduledStartDate"
+          v-model="newProjectInfo.projectScheduledStartDate"
           hint="计划开始 *"
           style="margin-top: 20px"
         />
@@ -35,7 +35,7 @@
           color="blue-11"
           square
           filled
-          v-model="projectScheduledFinishDate"
+          v-model="newProjectInfo.projectScheduledFinishDate"
           hint="计划完成 *"
           style="margin-top: 20px"
         />
@@ -44,7 +44,7 @@
           color="blue-11"
           square
           filled
-          v-model="projectDescription"
+          v-model="newProjectInfo.projectDescription"
           label="任务介绍 *"
           style="margin-top: 20px"
         />
@@ -53,7 +53,7 @@
             style="margin-left: 44%; margin-top: 30px"
             text-color="black"
             label="提交"
-            @click="newProject()"
+            @click="postNewProject()"
           />
         </div>
       </q-form>
@@ -62,32 +62,19 @@
 
   <div class="q-pa-md q-gutter-md">
     <div class="row justify-between"></div>
-    <q-table :rows="rows" :columns="columns" row-key="name">
+    <q-table :rows="projectRows" :columns="projectColumns" row-key="name">
       <template v-slot:top="props">
         <div class="col-2 q-table__title">项目</div>
         <q-btn
           size="20px"
           style="margin-left: 75%"
           label="新建"
-          @click="newp = true"
+          @click="newProjectBtn = true"
           class="bg-secondary text-white"
         />
       </template>
 
-      <template v-slot:body-cell-任务内容="props">
-        <q-td :props="props">
-          <q-btn
-            dense
-            round
-            flat
-            color="grey"
-            @click="showDescription(props)"
-            icon="lightbulb_outline"
-          ></q-btn>
-        </q-td>
-      </template>
-
-      <template v-slot:body-cell-actions="props">
+      <template v-slot:body-cell-projectInfo="props">
         <q-td :props="props">
           <q-btn
             dense
@@ -97,6 +84,11 @@
             @click="openProject(props)"
             icon="arrow_forward"
           ></q-btn>
+        </q-td>
+      </template>
+
+      <template v-slot:body-cell-actions="props">
+        <q-td :props="props">
           <q-btn
             dense
             round
@@ -110,26 +102,26 @@
     </q-table>
   </div>
   <div>
-    <q-card class="my-card" style="margin-left: 1%; width: 98%">
-      <q-parallax
-        :speed="1"
-        src="https://cdn.quasar.dev/img/parallax1.jpg"
-        :height="250"
-      >
-      </q-parallax>
-      <q-card-section>
-        <div class="text-h4 text-black">{{ curProjectName }}</div>
-      </q-card-section>
-      <q-separator />
-      <q-card-actions>
-        <div
-          style="width: 100%; word-wrap: break-word"
-          class="text-body1 text-black"
-        >
-          {{ curProjectDescription }}
-        </div>
-      </q-card-actions>
-    </q-card>
+    <!--    <q-card class="my-card" style="margin-left: 1%; width: 98%">-->
+    <!--      <q-parallax-->
+    <!--        :speed="1"-->
+    <!--        src="https://cdn.quasar.dev/img/parallax1.jpg"-->
+    <!--        :height="250"-->
+    <!--      >-->
+    <!--      </q-parallax>-->
+    <!--      <q-card-section>-->
+    <!--        <div class="text-h4 text-black">{{ curProjectName }}</div>-->
+    <!--      </q-card-section>-->
+    <!--      <q-separator />-->
+    <!--      <q-card-actions>-->
+    <!--        <div-->
+    <!--          style="width: 100%; word-wrap: break-word"-->
+    <!--          class="text-body1 text-black"-->
+    <!--        >-->
+    <!--          {{ curProjectDescription }}-->
+    <!--        </div>-->
+    <!--      </q-card-actions>-->
+    <!--    </q-card>-->
   </div>
 </template>
 
@@ -138,7 +130,7 @@ import { onMounted, ref } from "vue";
 import { axios } from "../boot/axios";
 import { useRouter } from "vue-router";
 
-const columns = [
+const projectColumns = [
   {
     name: "id",
     required: true,
@@ -147,97 +139,117 @@ const columns = [
     field: (row) => row.projectId,
     sortable: true,
   },
-  { name: "name", align: "center", label: "项目名称", field: "projectName" },
-  { name: "ShortId", label: "短Id", field: "projectShortId" },
-  { name: "Creator", label: "创建人", field: "projectCreator" },
+  { name: "Name", align: "center", label: "项目名称", field: "projectName" },
+  { name: "ShortId", align: "center", label: "短Id", field: "projectShortId" },
+  {
+    name: "Creator",
+    align: "center",
+    label: "创建人",
+    field: "projectCreator",
+  },
   {
     name: "ScheduledStartDate",
+    align: "center",
     label: "计划开始",
-    field: "projectScheduledStartDate",
+    // 单行写法
+    field: (row) => {
+      return formatTime(row.projectScheduledStartDate);
+    },
     sortable: true,
   },
   {
     name: "ScheduledFinishDate",
+    align: "center",
     label: "计划完成",
-    field: "projectScheduledFinishDate",
+    // 多行写法
+    field: (row) => {
+      if (row.projectScheduledFinishDate) {
+        return formatTime(row.projectScheduledFinishDate);
+      } else {
+        return "未定义";
+      }
+    },
+    // 或者下面着一种
+    // field: function (row) {
+    //   if (row.projectScheduledFinishDate) {
+    //     return formatTime(row.projectScheduledFinishDate);
+    //   } else {
+    //     return "未定义";
+    //   }
+    // },
+    // field: "projectScheduledFinishDate",
     sortable: true,
   },
-  { name: "任务内容", label: "任务内容" },
-  { name: "actions", label: "" },
+  { name: "projectInfo", align: "center", label: "任务内容" },
+  { name: "actions", align: "center", label: "操作" },
 ];
+
+function formatTime(timestamp) {
+  let date = new Date(timestamp);
+  let year = date.getFullYear();
+  let month = date.getMonth();
+  let day = date.getDay();
+  return `${year}-${month}-${day}`;
+}
 
 export default {
   setup() {
     const router = useRouter();
-    let rows = ref([]);
-    let projectId = ref("");
-    let projectName = ref("");
-    let projectShortId = ref("");
-    let projectDescription = ref("");
-    let projectScheduledStartDate = ref("");
-    let projectScheduledFinishDate = ref("");
-    let curProjectId = ref("");
-    let curProjectName = ref("");
-    let curProjectShortId = ref("");
-    let curProjectDescription = ref("");
-    let curProjectCreator = ref("");
-    let curProjectScheduledStartDate = ref("");
-    let curProjectScheduledFinishDate = ref("");
+    let projectRows = ref([]);
+    let newProjectInfo = ref({
+      projectName: "",
+      projectShortId: "",
+      projectId: 0,
+      projectDescription: "",
+      projectScheduledStartDate: Date(),
+      projectScheduledFinishDate: Date(),
+    });
     onMounted(() => {
       axios.get("/api/v1/project/getAll").then((successResponse) => {
         const responseResult = successResponse.data.data;
         console.log(responseResult);
+        // 填充列
         responseResult.forEach(function (item) {
-          const project = {};
-          project.projectName = item.projectName;
-          project.projectShortId = item.projectShortId;
-          project.projectId = item.id;
-          project.projectDescription = item.projectDescription;
-          project.projectScheduledStartDate = item.startedTime;
-          project.projectScheduledFinishDate = item.endedTime;
-          project.projectCreator = item.postedBy.username;
-          rows.value.push(project);
+          const project = {
+            projectName: item.projectName,
+            projectShortId: item.projectShortId,
+            projectId: item.id,
+            projectDescription: item.projectDescription,
+            projectScheduledStartDate: item.startTime,
+            projectScheduledFinishDate: item.finishTime,
+            projectCreator: item.postedBy.username,
+          };
+          projectRows.value.push(project);
         });
-        console.log(rows);
+        console.log(projectRows);
       });
     });
     return {
-      newp: ref(false),
-      projectName,
-      projectScheduledStartDate,
-      projectScheduledFinishDate,
-      projectShortId,
-      projectId,
-      projectDescription,
-      curProjectId,
-      curProjectName,
-      curProjectCreator,
-      curProjectScheduledStartDate,
-      curProjectScheduledFinishDate,
-      curProjectShortId,
-      curProjectDescription,
-      columns,
-      rows,
+      newProjectBtn: ref(false),
+      newProjectInfo,
+      projectColumns,
+      projectRows,
       router,
     };
   },
   methods: {
-    newProject() {
-      //TODO
-      let projectDescription = this.projectDescription;
-      let projectShortId = this.projectShortId;
-      let projectName = this.projectName;
-      let projectScheduledStartDate = this.projectScheduledStartDate;
-      let projectScheduledFinishDate = this.projectScheduledFinishDate;
+    postNewProject() {
+      let postData = {
+        name: this.newProjectInfo.projectName,
+        shortId: this.newProjectInfo.projectShortId,
+        startDate: this.newProjectInfo.projectScheduledStartDate,
+        finishDate: this.newProjectInfo.projectScheduledFinishDate,
+        description: this.newProjectInfo.projectDescription,
+      };
+      console.log(postData);
       axios
-        .post("/api/v1/project/new", {
-          name: projectName,
-          shortId: projectShortId,
-          projectScheduledStartDate,
-          projectScheduledFinishDate,
-          description: projectDescription,
+        .post("/api/v1/project/new", postData)
+        .then((successResponse) => {
+          // 成功以后可以关闭消息窗口的
+          this.newProjectBtn = false;
+          // 跳转回本页
+          this.router.push({});
         })
-        .then((successResponse) => {})
         .catch((failResponse) => {
           console.log(failResponse);
         });
@@ -246,9 +258,11 @@ export default {
       let projectId = props.row.projectId;
       console.log(projectId);
       this.router.push({
-        path: `/projects/projectInfo`, query: {
-          id: projectId
-        }
+        // 当你直接编码路径的时候 参数会被忽略
+        path: `/projects/${projectId}/projectInfo`,
+        // params: {
+        //   projectId: projectId,
+        // },
       });
     },
     deleteProject(props) {

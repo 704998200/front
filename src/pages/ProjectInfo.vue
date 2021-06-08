@@ -60,8 +60,7 @@
     </q-card>
   </q-dialog>
 
-
-  <div class="q-pa-md" style="width:100%">
+  <div class="q-pa-md" style="width: 100%">
     <div>
       <q-card class="my-card" style="margin-left: 1%; width: 98%">
         <q-parallax
@@ -71,8 +70,15 @@
         >
         </q-parallax>
         <q-card-section>
-          <span style="display:-moz-inline-box; display:inline-block; width:1500px;"
-                class="text-h4 text-black">{{ curProjectName }}</span>
+          <span
+            style="
+              display: -moz-inline-box;
+              display: inline-block;
+              width: 1500px;
+            "
+            class="text-h4 text-black"
+            >{{ curProjectName }}</span
+          >
           <q-btn
             size="15px"
             label="修改"
@@ -80,69 +86,79 @@
             class="bg-secondary text-white"
           />
         </q-card-section>
-        <q-separator/>
-
+        <q-separator />
 
         <q-card-section>
-
           <span
-            style="display:-moz-inline-box; display:inline-block; width:800px;"
+            style="
+              display: -moz-inline-box;
+              display: inline-block;
+              width: 800px;
+            "
             class="text-body1 text-black"
-          > 创建人:{{ curProjectCreator }}
+          >
+            创建人:{{ curProjectCreator }}
           </span>
 
-          <span
-            class="text-body1 text-black"
-          > 短ID:{{ curProjectShortId }}
-          </span>
-        </q-card-section>
-        <q-card-section>
-
-          <span
-            style="display:-moz-inline-box; display:inline-block; width:800px;"
-            class="text-body1 text-black"
-          > 创建时间:{{ curProjectCreatTime }}
-          </span>
-
-          <span
-
-            class="text-body1 text-black"
-          > 更新时间:{{ curProjectUpdateTime }}
+          <span class="text-body1 text-black">
+            短ID:{{ curProjectShortId }}
           </span>
         </q-card-section>
         <q-card-section>
           <span
-            style="display:-moz-inline-box; display:inline-block; width:800px;"
+            style="
+              display: -moz-inline-box;
+              display: inline-block;
+              width: 800px;
+            "
             class="text-body1 text-black"
-          > 预计开始时间:{{ curProjectScheduledStartDate }}
+          >
+            创建时间:{{ curProjectCreatTime }}
           </span>
 
-          <span
-
-            class="text-body1 text-black"
-          > 预计结束时间:{{ curProjectScheduledFinishDate }}
+          <span class="text-body1 text-black">
+            更新时间:{{ curProjectUpdateTime }}
           </span>
         </q-card-section>
-        <q-separator/>
         <q-card-section>
           <span
-            style="display:-moz-inline-box; display:inline-block; width:800px;"
+            style="
+              display: -moz-inline-box;
+              display: inline-block;
+              width: 800px;
+            "
             class="text-body1 text-black"
-          > 任务内容:{{ curProjectDescription }}
+          >
+            预计开始时间:{{ curProjectScheduledStartDate }}
+          </span>
+
+          <span class="text-body1 text-black">
+            预计结束时间:{{ curProjectScheduledFinishDate }}
           </span>
         </q-card-section>
-
+        <q-separator />
+        <q-card-section>
+          <span
+            style="
+              display: -moz-inline-box;
+              display: inline-block;
+              width: 800px;
+            "
+            class="text-body1 text-black"
+          >
+            任务内容:{{ curProjectDescription }}
+          </span>
+        </q-card-section>
       </q-card>
     </div>
-
   </div>
 </template>
 
 <script>
-import {onMounted, ref} from "vue";
-import {axios} from "../boot/axios";
-import {useRouter} from "vue-router";
-import {useRoute} from "vue-router";
+import { onMounted, ref } from "vue";
+import { axios } from "../boot/axios";
+import { useRouter } from "vue-router";
+import { useRoute } from "vue-router";
 
 export default {
   setup() {
@@ -163,27 +179,28 @@ export default {
     let curProjectScheduledStartDate = ref("");
     let curProjectScheduledFinishDate = ref("");
     onMounted(() => {
-        axios
-          .get("/api/v1/project/" + route.query.id + "/get")
-          .then((successResponse) => {
-            const responseResult = successResponse.data.data;
-            console.log(responseResult);
-            curProjectShortId.value = responseResult.projectShortId;
-            projectShortId.value = curProjectId.value = responseResult.projectId;
-            curProjectDescription.value = responseResult.projectDescription;
-            projectScheduledStartDate.value = curProjectScheduledStartDate.value = responseResult.startTime;
-            curProjectScheduledFinishDate.value = responseResult.endedTime;
-            curProjectCreator.value = responseResult.postedBy.username;
-            curProjectCreatTime.value = responseResult.createdTime;
-            curProjectUpdateTime.value = responseResult.updatedTime;
-            projectName.value = curProjectName.value = responseResult.projectName;
-            projectDescription.value = curProjectDescription.value = responseResult.projectDescription;
-          })
-          .catch((failResponse) => {
-            console.log(failResponse);
-          });
-      }
-    )
+      axios
+        .get("/api/v1/project/" + route.params.projectId + "/get")
+        .then((successResponse) => {
+          const responseResult = successResponse.data.data;
+          console.log(responseResult);
+          curProjectShortId.value = responseResult.projectShortId;
+          projectShortId.value = curProjectId.value = responseResult.projectId;
+          curProjectDescription.value = responseResult.projectDescription;
+          projectScheduledStartDate.value = curProjectScheduledStartDate.value =
+            responseResult.startTime;
+          curProjectScheduledFinishDate.value = responseResult.endedTime;
+          curProjectCreator.value = responseResult.postedBy.username;
+          curProjectCreatTime.value = responseResult.createdTime;
+          curProjectUpdateTime.value = responseResult.updatedTime;
+          projectName.value = curProjectName.value = responseResult.projectName;
+          projectDescription.value = curProjectDescription.value =
+            responseResult.projectDescription;
+        })
+        .catch((failResponse) => {
+          console.log(failResponse);
+        });
+    });
     return {
       editp: ref(false),
       curProjectId,
@@ -201,15 +218,13 @@ export default {
       projectShortId,
       projectDescription,
       router,
-      route
+      route,
     };
   },
   methods: {
     editProject() {
       //TODO
-
     },
-
   },
 };
 </script>

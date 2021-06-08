@@ -31,8 +31,10 @@
                 <q-item-label caption>{{ link.issueCreateTime }}</q-item-label>
               </q-item-section>
               <q-item-section avatar>
-                <q-chip :color='(link.status==="open")?"green":"red"' icon="bookmark"
-                >{{ link.status }}
+                <q-chip
+                  :color="link.status === 'open' ? 'green' : 'red'"
+                  icon="bookmark"
+                  >{{ link.status }}
                 </q-chip>
               </q-item-section>
               <q-btn
@@ -146,7 +148,7 @@ export default {
     },
     deleteIssue() {
       //TODO
-    }
+    },
   },
 };
 //修改模板

@@ -1,7 +1,15 @@
 <template>
   <div class="background"></div>
-  <div :class="'fixed-center'" class="q-pa-md"
-       style="max-width: 400px;background-color:  #C8C8C8;border:2px;border-radius:25px;">
+  <div
+    :class="'fixed-center'"
+    class="q-pa-md"
+    style="
+      max-width: 400px;
+      background-color: #c8c8c8;
+      border: 2px;
+      border-radius: 25px;
+    "
+  >
     <span CLASS="KKK">项目管理追踪系统注册</span>
     <q-form action="" class="q-gutter-md">
       <q-input

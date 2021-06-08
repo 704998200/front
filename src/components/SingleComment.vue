@@ -1,16 +1,17 @@
 <template>
   <div class="comment">
     <div class="text">
-      <a class="username" href="#">@{{ comment.user }}</a> <span>{{ comment.text }}</span>
+      <a class="username" href="#">@{{ comment.user }}</a>
+      <span>{{ comment.text }}</span>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'singleComment',
-  props: ['comment']
-}
+  name: "singleComment",
+  props: ["comment"],
+};
 </script>
 
 <style scoped>
@@ -21,7 +22,7 @@ export default {
   margin-bottom: 10px;
   align-items: center;
   color: #333;
-  background-color: #F2F2F2;
+  background-color: #f2f2f2;
   border-radius: 30px;
   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
 }

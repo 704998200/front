@@ -7,7 +7,7 @@
         :key="comment.id"
       ></single-comment>
     </div>
-    <hr>
+    <hr />
     <div class="reply">
       <input
         type="text"
@@ -18,34 +18,36 @@
         required
         @keyup.enter="submitComment"
       />
-      <button class="reply--button" @click.prevent="submitComment"><i class="fa fa-paper-plane"></i> Send</button>
+      <button class="reply--button" @click.prevent="submitComment">
+        <i class="fa fa-paper-plane"></i> Send
+      </button>
     </div>
   </div>
 </template>
 
 <script>
-import singleComment from './SingleComment'
+import singleComment from "./SingleComment";
 
 export default {
-  name: 'comments',
+  name: "comments",
   components: {
-    "single-comment": singleComment
+    "single-comment": singleComment,
   },
   data() {
     return {
-      reply: ''
-    }
+      reply: "",
+    };
   },
   methods: {
     submitComment() {
-      if (this.reply != '') {
-        this.$emit('submit-comment', this.reply);
-        this.reply = '';
+      if (this.reply != "") {
+        this.$emit("submit-comment", this.reply);
+        this.reply = "";
       }
-    }
+    },
   },
-  props: ['comments', 'current_user', 'comments_wrapper_classes']
-}
+  props: ["comments", "current_user", "comments_wrapper_classes"],
+};
 </script>
 
 <style scoped>
@@ -60,7 +62,7 @@ export default {
   display: flex;
   position: relative;
   align-items: center;
-  background-color: #EBEBEB;
+  background-color: #ebebeb;
   border-radius: 30px;
   padding: 5px 10px;
   overflow: hidden;
@@ -115,7 +117,9 @@ export default {
   font-size: 15px;
   line-height: 1.5;
   border-radius: 30px;
-  transition: color 0.25s ease-in-out, background-color 0.25s ease-in-out, border-color 0.25s ease-in-out, box-shadow 0.25s ease-in-out, right 0.25s ease-in-out;
+  transition: color 0.25s ease-in-out, background-color 0.25s ease-in-out,
+    border-color 0.25s ease-in-out, box-shadow 0.25s ease-in-out,
+    right 0.25s ease-in-out;
   outline: 0;
 }
 

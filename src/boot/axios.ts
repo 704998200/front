@@ -33,7 +33,7 @@ export default boot(({ app, store, router }) => {
       console.log(store);
       if (store.state.token) {
         // 判断是否存在 token 如果存在的话，则每个 http header 都加上 token
-        console.log(`token为 ${store.state.token.bearerToken}`);
+        // console.log(`token为 ${store.state.token.bearerToken}`);
         config.headers.Authorization = `Bearer ${store.state.token.bearerToken}`;
       } else {
         // 没有 token 就跳转到 login
