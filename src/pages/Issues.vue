@@ -183,10 +183,21 @@ export default {
         text: reply,
       });
     },
-    getProjectIssues(project) {
-      console.log(project);
-      let projectId = project.projectId;
+    getProjectIssues(projectId) {
+      // console.log(projectId);
       // TODO 此时可以调用 Axios
+      axios
+        .get(`/api/v1/project/${projectId}/getAll`)
+        .then((successResponse) => {
+          const responseResult = successResponse.data.data;
+          responseResult.forEach(function (item) {
+            const project = {};
+            project.projectName = item.projectName;
+            project.projectId = item.id;
+            projects.value.push(project);
+          });
+          console.log(projects);
+        });
     },
     deleteIssue() {
       //TODO
