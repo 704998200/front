@@ -11,18 +11,28 @@
     "
   >
     <span CLASS="KKK">项目管理追踪系统注册</span>
-    <q-form action="" class="q-gutter-md">
+    <q-form action="" class="q-gutter-md" @submit="onSubmit">
       <q-input
         v-model="username"
-        :rules="[(val) => (val && val.length > 0) || 'Please type something']"
+        :rules="[(val) => (val && val.length > 0) || '用户名不能为空']"
         filled
         label="用户名 *"
         lazy-rules
       />
 
       <q-input
+        v-model="email"
+        type="email"
+        :rules="[(val) => (val && val.length > 0) || '邮箱不能为空']"
+        filled
+        label="输入邮箱 *"
+      >
+      </q-input>
+
+      <q-input
         v-model="password"
         :type="isPwd ? 'password' : 'text'"
+        :rules="[(val) => (val && val.length > 0) || '密码不能为空']"
         filled
         label="输入密码 *"
       >
@@ -36,8 +46,19 @@
       </q-input>
 
       <q-input
-        v-model="repassword"
+        v-model="rePassword"
         :type="isPwd ? 'password' : 'text'"
+        :rules="[(val) =>{
+          if (val && val.length > 0) {
+          if(val===this.password){
+          return true;}
+          else{
+             return '两次输入不一样'
+          }
+        }else{
+          return '密码不能为空'
+        }
+        }]"
         filled
         label="再次输入密码"
       >
@@ -51,7 +72,7 @@
       </q-input>
 
       <div>
-        <q-btn color="primary" label="提交" @click="Submit" />
+        <q-btn color="primary" label="提交" type="submit"/>
         <q-btn
           class="q-ml-sm"
           color="primary"
@@ -82,6 +103,7 @@
   padding: 4px 16px
   margin: 4rem 0 1.5rem
   z-index: 1
+
 .background
   position: absolute
   width: 100%
@@ -91,45 +113,62 @@
 </style>
 
 <script>
-import { ref } from "vue";
-import { api } from "../boot/axios";
-import { useRouter } from "vue-router";
+import {ref} from "vue";
+import {api, axios} from "../boot/axios";
+import {useRouter} from "vue-router";
 
 export default {
-  data() {
+  setup() {
     const isPwd = ref(true);
     const router = useRouter();
+    const username = ref("");
+    const password = ref("");
+    const rePassword = ref("");
+    const email = ref("")
     return {
-      username: null,
-      password: null,
-      repassword: null,
+      username,
+      password,
+      rePassword,
       isPwd,
       router,
+      email
     };
   },
   methods: {
-    Submit() {
+    onSubmit() {
       let username = this.username;
       let password = this.password;
-      api
-        .post("/user/login", {
-          username,
-          password,
+      let email = this.email;
+      axios
+        .post("/api/user/register", {
+          username: username,
+          password: password,
+          email: email
         })
         .then((successResponse) => {
-          const responseResult = JSON.stringify(successResponse.data);
-          if (successResponse.data.code === 200) {
-            void router.replace({ path: "/login" });
-            alert("注册成功!");
-          }
+          this.router.push({
+            path: "/login",
+          });
+          this.$q.notify({
+            message: '注册成功',
+            color: 'red',
+            position: 'center',
+            timeout: '1000',
+          })
         })
         .catch((failResponse) => {
-          path: "/user/login", alert("注册失败！");
+          console.log(failResponse);
+          this.$q.notify({
+            message: '注册失败',
+            color: 'red',
+            position: 'center',
+            timeout: '1000',
+          })
         });
     },
     Login() {
       let router = this.router;
-      void router.push({ path: "/login" });
+      void router.push({path: "/login"});
     },
   },
 };

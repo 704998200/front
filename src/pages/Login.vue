@@ -12,7 +12,7 @@
     "
   >
     <span class="KKK">项目管理追踪系统</span>
-    <q-form action="" class="q-gutter-md">
+    <q-form action="" class="q-gutter-md" @submit="onSubmit">
       <q-input
         v-model="username"
         :rules="[(val) => (val && val.length > 0) || '用户名不能为空']"
@@ -22,6 +22,7 @@
 
       <q-input
         v-model="password"
+        :rules="[(val) => (val && val.length > 0) || '密码不能为空']"
         :type="isPwd ? 'password' : 'text'"
         filled
         label="你的密码 *"
@@ -36,13 +37,13 @@
       </q-input>
 
       <div>
-        <q-btn color="primary" label="登录" @click="login" />
+        <q-btn color="primary" label="登录" type="submit"/>
         <q-btn
           class="q-ml-sm"
           color="primary"
           flat
           label="注册"
-          @click="register"
+          @click="register()"
         />
       </div>
     </q-form>
@@ -77,11 +78,11 @@
 </style>
 
 <script>
-import { axios } from "src/boot/axios";
-import { useRouter } from "vue-router";
-import { useQuasar } from "quasar";
-import { useStore } from "vuex";
-import { computed } from "vue";
+import {axios} from "src/boot/axios";
+import {useRouter} from "vue-router";
+import {useQuasar} from "quasar";
+import {useStore} from "vuex";
+import {computed, ref} from "vue";
 
 export default {
   data() {
@@ -92,8 +93,12 @@ export default {
     };
   },
   setup() {
+    const username = ref("");
+    const password = ref("");
+    const isPwd = ref(true);
     const router = useRouter();
     const myStore = useStore();
+    const $q = useQuasar();
     let tokenState = computed({
       // 相当于重写了返回值,参考 Kotlin
       set: (value) => {
@@ -105,10 +110,14 @@ export default {
     return {
       tokenState,
       router,
+      $q,
+      username,
+      password,
+      isPwd
     };
   },
   methods: {
-    login() {
+    onSubmit() {
       let username = this.username;
       let password = this.password;
       console.log(`输入信息 ${username} ${password} `);
@@ -133,11 +142,17 @@ export default {
         })
         .catch((failResponse) => {
           console.log(failResponse);
+          this.$q.notify({
+            message: '登陆失败',
+            color: 'red',
+            position: 'center',
+            timeout: '1000',
+          })
         });
     },
     register() {
       let router = this.$router;
-      void router.push({ path: "/register" });
+      void router.push({path: "/register"});
     },
   },
 };
