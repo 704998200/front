@@ -163,11 +163,7 @@ const projectColumns = [
     label: "计划完成",
     // 多行写法
     field: (row) => {
-      if (row.projectScheduledFinishDate) {
-        return formatTime(row.projectScheduledFinishDate);
-      } else {
-        return "未定义";
-      }
+      return formatTime(row.projectScheduledStartDate);
     },
     // 或者下面着一种
     // field: function (row) {
@@ -185,11 +181,22 @@ const projectColumns = [
 ];
 
 function formatTime(timestamp) {
-  let date = new Date(timestamp);
-  let year = date.getFullYear();
-  let month = date.getMonth();
-  let day = date.getDay();
-  return `${year}-${month}-${day}`;
+  if (timestamp) {
+    let date = new Date(timestamp);
+    let year = date.getFullYear();
+    let month = date.getMonth();
+    let day = date.getDay();
+    if (month.toString().length < 2) {
+      month = '0' + month;
+
+    }
+    if (day.toString().length < 2) {
+      day = '0' + day;
+    }
+    return `${year}-${month}-${day}`;
+  } else {
+    return '未定义';
+  }
 }
 
 export default {
@@ -268,10 +275,6 @@ export default {
     deleteProject(props) {
       //TODO
       console.log(props.row);
-    },
-    showDescription(props) {
-      this.curProjectName = props.row.projectName;
-      this.curProjectDescription = props.row.projectDescription;
     },
   },
 };

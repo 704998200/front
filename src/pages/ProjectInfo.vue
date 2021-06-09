@@ -9,7 +9,7 @@
           color="blue-11"
           square
           filled
-          v-model="projectShortId"
+          v-model="editProject.projectShortId"
           label="短ID *"
           style="margin-top: 10px"
         />
@@ -17,7 +17,7 @@
           color="blue-11"
           square
           filled
-          v-model="projectName"
+          v-model="editProject.projectName"
           label="项目名称 *"
           style="margin-top: 20px"
         />
@@ -26,7 +26,7 @@
           color="blue-11"
           square
           filled
-          v-model="projectScheduledStartDate"
+          v-model="editProject.projectScheduledStartDate"
           hint="计划开始 *"
           style="margin-top: 20px"
         />
@@ -35,7 +35,7 @@
           color="blue-11"
           square
           filled
-          v-model="projectScheduledFinishDate"
+          v-model="editProject.projectScheduledFinishDate"
           hint="计划完成 *"
           style="margin-top: 20px"
         />
@@ -44,7 +44,7 @@
           color="blue-11"
           square
           filled
-          v-model="projectDescription"
+          v-model="editProject.projectDescription"
           label="任务介绍 *"
           style="margin-top: 20px"
         />
@@ -53,7 +53,7 @@
             style="margin-left: 44%; margin-top: 30px"
             text-color="black"
             label="提交"
-            @click="editProject()"
+            @click="editThisProject()"
           />
         </div>
       </q-form>
@@ -77,7 +77,7 @@
               width: 1500px;
             "
             class="text-h4 text-black"
-            >{{ curProjectName }}</span
+          >{{ cur.projectName }}</span
           >
           <q-btn
             size="15px"
@@ -86,7 +86,7 @@
             class="bg-secondary text-white"
           />
         </q-card-section>
-        <q-separator />
+        <q-separator/>
 
         <q-card-section>
           <span
@@ -97,11 +97,11 @@
             "
             class="text-body1 text-black"
           >
-            创建人:{{ curProjectCreator }}
+            创建人:{{ cur.projectCreator }}
           </span>
 
           <span class="text-body1 text-black">
-            短ID:{{ curProjectShortId }}
+            短ID:{{ cur.projectShortId }}
           </span>
         </q-card-section>
         <q-card-section>
@@ -113,11 +113,11 @@
             "
             class="text-body1 text-black"
           >
-            创建时间:{{ curProjectCreatTime }}
+            创建时间:{{ cur.projectCreatTime }}
           </span>
 
           <span class="text-body1 text-black">
-            更新时间:{{ curProjectUpdateTime }}
+            更新时间:{{ cur.projectUpdateTime }}
           </span>
         </q-card-section>
         <q-card-section>
@@ -129,24 +129,26 @@
             "
             class="text-body1 text-black"
           >
-            预计开始时间:{{ curProjectScheduledStartDate }}
+            预计开始时间:{{ cur.projectScheduledStartDate }}
           </span>
 
           <span class="text-body1 text-black">
-            预计结束时间:{{ curProjectScheduledFinishDate }}
+            预计结束时间:{{ cur.projectScheduledFinishDate }}
           </span>
         </q-card-section>
-        <q-separator />
+        <q-separator/>
         <q-card-section>
           <span
             style="
               display: -moz-inline-box;
               display: inline-block;
-              width: 800px;
+              word-break: break-word;
+
             "
             class="text-body1 text-black"
           >
-            任务内容:{{ curProjectDescription }}
+            任务内容:
+            {{ cur.projectDescription }}
           </span>
         </q-card-section>
       </q-card>
@@ -155,47 +157,72 @@
 </template>
 
 <script>
-import { onMounted, ref } from "vue";
-import { axios } from "../boot/axios";
-import { useRouter } from "vue-router";
-import { useRoute } from "vue-router";
+import {onMounted, ref} from "vue";
+import {axios} from "../boot/axios";
+import {useRouter} from "vue-router";
+import {useRoute} from "vue-router";
+
+function formatTime(timestamp) {
+  if (timestamp) {
+    let date = new Date(timestamp);
+    let year = date.getFullYear();
+    let month = date.getMonth();
+    let day = date.getDay();
+    if (month.toString().length < 2) {
+      month = '0' + month;
+
+    }
+    if (day.toString().length < 2) {
+      day = '0' + day;
+    }
+    return `${year}-${month}-${day}`;
+  } else {
+    return '未定义';
+  }
+}
 
 export default {
   setup() {
     const router = useRouter();
     const route = useRoute();
-    let projectName = ref("");
-    let projectScheduledStartDate = ref("");
-    let projectScheduledFinishDate = ref("");
-    let projectShortId = ref("");
-    let projectDescription = ref("");
-    let curProjectId = ref("");
-    let curProjectName = ref("");
-    let curProjectShortId = ref("");
-    let curProjectDescription = ref("");
-    let curProjectCreator = ref("");
-    let curProjectCreatTime = ref("");
-    let curProjectUpdateTime = ref("");
-    let curProjectScheduledStartDate = ref("");
-    let curProjectScheduledFinishDate = ref("");
+    let editProject = ref({
+        projectName: "",
+        projectShortId: "",
+        projectId: 0,
+        projectDescription: "",
+        projectScheduledStartDate: Date(),
+        projectScheduledFinishDate: Date(),
+      }
+    )
+    let cur = ref({
+        projectName: "",
+        projectShortId: "",
+        projectId: 0,
+        projectDescription: "",
+        projectScheduledStartDate: Date(),
+        projectScheduledFinishDate: Date(),
+        projectCreator: "",
+        projectCreatTime: Date(),
+        projectUpdateTime: Date()
+      }
+    );
     onMounted(() => {
       axios
         .get("/api/v1/project/" + route.params.projectId + "/get")
         .then((successResponse) => {
           const responseResult = successResponse.data.data;
           console.log(responseResult);
-          curProjectShortId.value = responseResult.projectShortId;
-          projectShortId.value = curProjectId.value = responseResult.projectId;
-          curProjectDescription.value = responseResult.projectDescription;
-          projectScheduledStartDate.value = curProjectScheduledStartDate.value =
-            responseResult.startTime;
-          curProjectScheduledFinishDate.value = responseResult.endedTime;
-          curProjectCreator.value = responseResult.postedBy.username;
-          curProjectCreatTime.value = responseResult.createdTime;
-          curProjectUpdateTime.value = responseResult.updatedTime;
-          projectName.value = curProjectName.value = responseResult.projectName;
-          projectDescription.value = curProjectDescription.value =
-            responseResult.projectDescription;
+          cur.value.projectShortId = responseResult.projectShortId;
+          editProject.value.projectShortId = cur.value.projectId = responseResult.projectId;
+          cur.value.projectDescription = responseResult.projectDescription;
+          editProject.value.projectScheduledStartDate = cur.value.projectScheduledStartDate = formatTime(responseResult.startTime);
+          editProject.value.projectScheduledFinishDate = cur.value.projectScheduledFinishDate = formatTime(responseResult.finishTime);
+          cur.value.projectCreator = responseResult.postedBy.username;
+          cur.value.projectCreatTime = formatTime(responseResult.createdTime);
+          cur.value.projectUpdateTime = formatTime(responseResult.updatedTime);
+          editProject.value.projectName = cur.value.projectName = responseResult.projectName;
+          editProject.value.projectDescription = cur.value.projectDescription = responseResult.projectDescription;
+          editProject.value.projectId = cur.value.projectId = responseResult.projectId;
         })
         .catch((failResponse) => {
           console.log(failResponse);
@@ -203,28 +230,17 @@ export default {
     });
     return {
       editp: ref(false),
-      curProjectId,
-      curProjectCreatTime,
-      curProjectUpdateTime,
-      curProjectName,
-      curProjectCreator,
-      curProjectScheduledStartDate,
-      curProjectScheduledFinishDate,
-      curProjectShortId,
-      curProjectDescription,
-      projectName,
-      projectScheduledStartDate,
-      projectScheduledFinishDate,
-      projectShortId,
-      projectDescription,
+      cur,
+      editProject,
       router,
       route,
     };
   },
   methods: {
-    editProject() {
+    editThisProject() {
       //TODO
     },
+
   },
 };
 </script>

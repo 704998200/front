@@ -1,8 +1,8 @@
 <template>
   <q-layout class="bg-grey-1" view="hHh lpR fFf">
     <q-header class="bg-white text-grey-8" elevated height-hint="64">
-      <div style="float: left">
-        <q-toolbar class="">
+      <div>
+        <q-toolbar>
           <q-btn
             aria-label="Menu"
             class="q-mr-sm"
@@ -17,23 +17,25 @@
             v-if="$q.screen.gt.xs"
             class="row items-center no-wrap"
             shrink
+
           >
             <span>项目管理追踪系统</span>
             <!--          <span>{{ tokenState }}</span>-->
           </q-toolbar-title>
-          <q-space />
-          <q-space />
-          <div class="q-gutter-sm row items-center no-wrap">
-            <q-btn-group rounded>
-              <q-btn>
-                <q-avatar :class="'float-right'" size="30px">
-                  <img
-                    :src="`https://www.gravatar.com/avatar/${emailHash}?s=128&d=mm&r=g`"
-                  />
-                </q-avatar>
-                <q-tooltip>
-                  <div>{{ username }}</div>
-                </q-tooltip>
+
+          <q-space/>
+
+          <q-btn-group rounded style="left: 100% ">
+
+            <q-btn>
+              <q-avatar size="30px">
+                <img
+                  :src="`https://www.gravatar.com/avatar/${emailHash}?s=128&d=mm&r=g`"
+                />
+              </q-avatar>
+              <q-tooltip>
+                <div>{{ username }}</div>
+              </q-tooltip>
               </q-btn>
               <q-btn-dropdown rounded auto-close>
                 <q-list>
@@ -45,7 +47,6 @@
                 </q-list>
               </q-btn-dropdown>
             </q-btn-group>
-          </div>
         </q-toolbar>
       </div>
     </q-header>
