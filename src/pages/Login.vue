@@ -37,7 +37,7 @@
       </q-input>
 
       <div>
-        <q-btn color="primary" label="登录" type="submit"/>
+        <q-btn color="primary" label="登录" type="submit" />
         <q-btn
           class="q-ml-sm"
           color="primary"
@@ -78,11 +78,11 @@
 </style>
 
 <script>
-import {axios} from "src/boot/axios";
-import {useRouter} from "vue-router";
-import {useQuasar} from "quasar";
-import {useStore} from "vuex";
-import {computed, ref} from "vue";
+import { axios } from "src/boot/axios";
+import { useRouter } from "vue-router";
+import { useQuasar } from "quasar";
+import { useStore } from "vuex";
+import { computed, ref } from "vue";
 
 export default {
   data() {
@@ -93,6 +93,7 @@ export default {
     };
   },
   setup() {
+    //ref引用传递
     const username = ref("");
     const password = ref("");
     const isPwd = ref(true);
@@ -107,13 +108,14 @@ export default {
       },
       get: () => myStore.state.token.bearerToken,
     });
+    //获取下面的数据发布到生命周期里面
     return {
       tokenState,
       router,
       $q,
       username,
       password,
-      isPwd
+      isPwd,
     };
   },
   methods: {
@@ -143,16 +145,16 @@ export default {
         .catch((failResponse) => {
           console.log(failResponse);
           this.$q.notify({
-            message: '登陆失败',
-            color: 'red',
-            position: 'center',
-            timeout: '1000',
-          })
+            message: "登陆失败",
+            color: "red",
+            position: "center",
+            timeout: "1000",
+          });
         });
     },
     register() {
       let router = this.$router;
-      void router.push({path: "/register"});
+      void router.push({ path: "/register" });
     },
   },
 };
