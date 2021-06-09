@@ -274,7 +274,6 @@ export default {
     },
     deleteProject(props) {
       //TODO
-      console.log(props.row);
     },
   },
 };

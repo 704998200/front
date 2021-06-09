@@ -1,4 +1,45 @@
 <template>
+  <q-dialog v-model="newi">
+    <q-card style="width: 600px; height: 800px">
+      <q-card-section>
+        <div class="text-h6 text-center">创建问题</div>
+      </q-card-section>
+      <q-form>
+        <q-input
+          color="blue-11"
+          square
+          filled
+          v-model="newIssue.issueName"
+          label="问题名称 *"
+          style="margin-top: 20px"
+        />
+        <div>状态:</div>
+        <div class="q-gutter-sm">
+          <q-radio v-model="newIssue.status" val="open" label="open"/>
+          <q-radio v-model="newIssue.status" val="close" label="close"/>
+        </div>
+        <q-input
+          type="textarea"
+          color="blue-11"
+          square
+          filled
+          v-model="newIssue.issueDescription"
+          label="问题详情 *"
+          style="margin-top: 20px"
+        />
+        <div>
+          <q-btn
+            style="margin-left: 44%; margin-top: 30px"
+            text-color="black"
+            label="提交"
+            @click="newIssue()"
+          />
+        </div>
+      </q-form>
+    </q-card>
+  </q-dialog>
+
+
   <q-layout class="bg-grey-1" view="hHh lpR fFf">
     <q-drawer :width="400" bordered content-class="bg-white" show-if-above>
       <q-scroll-area class="fit">
@@ -7,12 +48,19 @@
             v-for="project in projects"
             :key="project.projectName"
             v-ripple
-            clickable
-            @click="getProjectIssues(project)"
+            @click="getProjectIssues(project.projectId)"
           >
             <q-item-section>
               <q-item-label>{{ project.projectName }}</q-item-label>
             </q-item-section>
+            <q-btn
+              dense
+              round
+              flat
+              color="grey"
+              @click="newi=true"
+              icon="playlist_add"
+            ></q-btn>
           </q-item>
         </q-list>
       </q-scroll-area>
@@ -21,20 +69,20 @@
       <q-page>
         <div class="q-pa-md" style="width: 100%; max-height: 50%">
           <q-list bordered separator>
-            <q-item clickable v-ripple v-for="link in links">
+            <q-item v-ripple clickable @click="openIssue()" v-for="issue in issues">
               <q-item-section avatar top>
-                <q-avatar icon="folder" color="primary" text-color="white" />
+                <q-avatar icon="folder" color="primary" text-color="white"/>
               </q-item-section>
               <q-item-section>
-                <q-item-label lines="1">{{ link.text }}</q-item-label>
-                <q-item-label caption>{{ link.issueUpdateTime }}</q-item-label>
-                <q-item-label caption>{{ link.issueCreateTime }}</q-item-label>
+                <q-item-label lines="1">{{ issue.issueName }}</q-item-label>
+                <q-item-label caption>更新于:{{ issue.issueUpdateTime }}</q-item-label>
+                <q-item-label caption>创建于:{{ issue.issueCreateTime }}</q-item-label>
               </q-item-section>
               <q-item-section avatar>
                 <q-chip
-                  :color="link.status === 'open' ? 'green' : 'red'"
+                  :color="issue.status === 'open' ? 'green' : 'grey'"
                   icon="bookmark"
-                  >{{ link.status }}
+                >状态{{ issue.status }}
                 </q-chip>
               </q-item-section>
               <q-btn
@@ -91,36 +139,21 @@ export default {
       });
     });
     return {
-      links: [
+      newi: ref(false),
+      issues: [
         {
           issueTitle: "项目管理",
           issueContent: "1321321",
           issueUpdateTime: "5464564564",
           issueCreateTime: "456456456",
           status: "open",
-        },
-        {
-          text: "66管理",
-          status: "close",
-        },
-        {
-          text: "项目管理",
-        },
-        {
-          text: "项目管理",
-        },
-        {
-          text: "项目管理",
-        },
-        {
-          text: "项目管理",
-        },
-        {
-          text: "项目管理",
-        },
-        {
-          text: "项目管理",
-        },
+        }, {
+          issueTitle: "项目管理",
+          issueContent: "1321321",
+          issueUpdateTime: "5464564564",
+          issueCreateTime: "456456456",
+          status: "open",
+        }
       ],
       projects,
       comments,
@@ -149,6 +182,20 @@ export default {
     deleteIssue() {
       //TODO
     },
+    openIssue() {
+      //TODO
+      let projectId = props.row.projectId;
+      console.log(projectId);
+      this.router.push({
+        // 当你直接编码路径的时候 参数会被忽略
+        path: `/projects/${projectId}/projectInfo`,
+        // params: {
+        //   projectId: projectId,
+        // },
+      });
+    }, newIssue() {
+      //TODO
+    }
   },
 };
 //修改模板
