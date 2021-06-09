@@ -48,17 +48,19 @@
       <q-input
         v-model="rePassword"
         :type="isPwd ? 'password' : 'text'"
-        :rules="[(val) =>{
-          if (val && val.length > 0) {
-          if(val===this.password){
-          return true;}
-          else{
-             return '两次输入不一样'
-          }
-        }else{
-          return '密码不能为空'
-        }
-        }]"
+        :rules="[
+          (val) => {
+            if (val && val.length > 0) {
+              if (val === this.password) {
+                return true;
+              } else {
+                return '两次输入不一样';
+              }
+            } else {
+              return '密码不能为空';
+            }
+          },
+        ]"
         filled
         label="再次输入密码"
       >
@@ -72,7 +74,7 @@
       </q-input>
 
       <div>
-        <q-btn color="primary" label="提交" type="submit"/>
+        <q-btn color="primary" label="提交" type="submit" />
         <q-btn
           class="q-ml-sm"
           color="primary"
@@ -113,9 +115,9 @@
 </style>
 
 <script>
-import {ref} from "vue";
-import {api, axios} from "../boot/axios";
-import {useRouter} from "vue-router";
+import { ref } from "vue";
+import { api, axios } from "../boot/axios";
+import { useRouter } from "vue-router";
 
 export default {
   setup() {
@@ -124,14 +126,14 @@ export default {
     const username = ref("");
     const password = ref("");
     const rePassword = ref("");
-    const email = ref("")
+    const email = ref("");
     return {
       username,
       password,
       rePassword,
       isPwd,
       router,
-      email
+      email,
     };
   },
   methods: {
@@ -140,35 +142,35 @@ export default {
       let password = this.password;
       let email = this.email;
       axios
-        .post("/api/user/register", {
+        .post("/api/v1/user/register", {
           username: username,
           password: password,
-          email: email
+          email: email,
         })
         .then((successResponse) => {
           this.router.push({
             path: "/login",
           });
           this.$q.notify({
-            message: '注册成功',
-            color: 'red',
-            position: 'center',
-            timeout: '1000',
-          })
+            message: "注册成功",
+            color: "green",
+            position: "center",
+            timeout: "1000",
+          });
         })
         .catch((failResponse) => {
           console.log(failResponse);
           this.$q.notify({
-            message: '注册失败',
-            color: 'red',
-            position: 'center',
-            timeout: '1000',
-          })
+            message: "注册失败",
+            color: "red",
+            position: "center",
+            timeout: "1000",
+          });
         });
     },
     Login() {
       let router = this.router;
-      void router.push({path: "/login"});
+      void router.push({ path: "/login" });
     },
   },
 };
