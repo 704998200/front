@@ -1,5 +1,5 @@
 <template>
-  <q-dialog v-model="newi">
+  <q-dialog v-model="newIssueBtn">
     <q-card style="width: 600px; height: 800px">
       <q-card-section>
         <div class="text-h6 text-center">创建问题</div>
@@ -15,8 +15,8 @@
         />
         <div>状态:</div>
         <div class="q-gutter-sm">
-          <q-radio v-model="newIssue.status" val="open" label="open"/>
-          <q-radio v-model="newIssue.status" val="close" label="close"/>
+          <q-radio v-model="newIssue.status" val="open" label="open" />
+          <q-radio v-model="newIssue.status" val="close" label="close" />
         </div>
         <q-input
           type="textarea"
@@ -39,7 +39,6 @@
     </q-card>
   </q-dialog>
 
-
   <q-layout class="bg-grey-1" view="hHh lpR fFf">
     <q-drawer :width="400" bordered content-class="bg-white" show-if-above>
       <q-scroll-area class="fit">
@@ -58,7 +57,7 @@
               round
               flat
               color="grey"
-              @click="newi=true"
+              @click="newIssueBtn = true"
               icon="playlist_add"
             ></q-btn>
           </q-item>
@@ -69,20 +68,29 @@
       <q-page>
         <div class="q-pa-md" style="width: 100%; max-height: 50%">
           <q-list bordered separator>
-            <q-item v-ripple clickable @click="openIssue()" v-for="issue in issues">
+            <q-item
+              v-ripple
+              clickable
+              @click="openIssue()"
+              v-for="issue in issues"
+            >
               <q-item-section avatar top>
-                <q-avatar icon="folder" color="primary" text-color="white"/>
+                <q-avatar icon="folder" color="primary" text-color="white" />
               </q-item-section>
               <q-item-section>
                 <q-item-label lines="1">{{ issue.issueName }}</q-item-label>
-                <q-item-label caption>更新于:{{ issue.issueUpdateTime }}</q-item-label>
-                <q-item-label caption>创建于:{{ issue.issueCreateTime }}</q-item-label>
+                <q-item-label caption
+                  >更新于:{{ issue.issueUpdateTime }}</q-item-label
+                >
+                <q-item-label caption
+                  >创建于:{{ issue.issueCreateTime }}</q-item-label
+                >
               </q-item-section>
               <q-item-section avatar>
                 <q-chip
                   :color="issue.status === 'open' ? 'green' : 'grey'"
                   icon="bookmark"
-                >状态{{ issue.status }}
+                  >状态{{ issue.status }}
                 </q-chip>
               </q-item-section>
               <q-btn
@@ -139,7 +147,7 @@ export default {
       });
     });
     return {
-      newi: ref(false),
+      newIssueBtn: ref(false),
       issues: [
         {
           issueTitle: "项目管理",
@@ -147,13 +155,14 @@ export default {
           issueUpdateTime: "5464564564",
           issueCreateTime: "456456456",
           status: "open",
-        }, {
+        },
+        {
           issueTitle: "项目管理",
           issueContent: "1321321",
           issueUpdateTime: "5464564564",
           issueCreateTime: "456456456",
           status: "open",
-        }
+        },
       ],
       projects,
       comments,
@@ -193,9 +202,10 @@ export default {
         //   projectId: projectId,
         // },
       });
-    }, newIssue() {
+    },
+    newIssue() {
       //TODO
-    }
+    },
   },
 };
 //修改模板
