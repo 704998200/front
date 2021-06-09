@@ -30,7 +30,7 @@ export default boot(({ app, store, router }) => {
   axios.interceptors.request.use(
     (config) => {
       // console.log("请求拦截" + config);
-      console.log(store);
+      // console.log(store);
       if (store.state.token) {
         // 判断是否存在 token 如果存在的话，则每个 http header 都加上 token
         // console.log(`token为 ${store.state.token.bearerToken}`);

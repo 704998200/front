@@ -17,16 +17,14 @@
             v-if="$q.screen.gt.xs"
             class="row items-center no-wrap"
             shrink
-
           >
             <span>项目管理追踪系统</span>
             <!--          <span>{{ tokenState }}</span>-->
           </q-toolbar-title>
 
-          <q-space/>
+          <q-space />
 
-          <q-btn-group rounded style="left: 100% ">
-
+          <q-btn-group rounded style="left: 100%">
             <q-btn>
               <q-avatar size="30px">
                 <img
@@ -36,17 +34,17 @@
               <q-tooltip>
                 <div>{{ username }}</div>
               </q-tooltip>
-              </q-btn>
-              <q-btn-dropdown rounded auto-close>
-                <q-list>
-                  <q-item clickable v-close-popup @click="logout()">
-                    <q-item-section>
-                      <q-item-label>登出</q-item-label>
-                    </q-item-section>
-                  </q-item>
-                </q-list>
-              </q-btn-dropdown>
-            </q-btn-group>
+            </q-btn>
+            <q-btn-dropdown rounded auto-close>
+              <q-list>
+                <q-item clickable v-close-popup @click="logout()">
+                  <q-item-section>
+                    <q-item-label>登出</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-btn-dropdown>
+          </q-btn-group>
         </q-toolbar>
       </div>
     </q-header>
@@ -119,7 +117,7 @@ export default {
       get: () => myStore.state.token.bearerToken
     });
     onMounted(() => {
-      console.log(tokenState);
+      // console.log(tokenState);
       if (tokenState.value == "") {
         // 说明还没有准备 Token,自然就是去登陆
         console.log("还没有登陆");
@@ -130,7 +128,7 @@ export default {
       axios.get("/api/v1/user/get").then((successResponse) => {
         // 不要解码,因为已经解码过了
         const responseResult = successResponse.data;
-        console.log(responseResult);
+        // console.log(responseResult);
         // 这里需要使用 value 来访问
         username.value = responseResult.data.username;
         email.value = responseResult.data.email;

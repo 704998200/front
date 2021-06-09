@@ -85,13 +85,6 @@ import { useStore } from "vuex";
 import { computed, ref } from "vue";
 
 export default {
-  data() {
-    return {
-      username: "",
-      password: "",
-      isPwd: true,
-    };
-  },
   setup() {
     //ref引用传递
     const username = ref("");
@@ -120,10 +113,13 @@ export default {
   },
   methods: {
     onSubmit() {
+      //从页面获取数据
       let username = this.username;
       let password = this.password;
       console.log(`输入信息 ${username} ${password} `);
+      //提交数据
       axios
+        //跳转到登陆页面
         .post("/api/auth/login", {
           username,
           password,
@@ -153,8 +149,9 @@ export default {
         });
     },
     register() {
-      let router = this.$router;
-      void router.push({ path: "/register" });
+      let router = this.router;
+      //跳转到新页面
+      router.push({ path: "/register" });
     },
   },
 };

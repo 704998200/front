@@ -129,6 +129,7 @@
 import { onMounted, ref } from "vue";
 import { axios } from "../boot/axios";
 import { useRouter } from "vue-router";
+import moment from "moment";
 
 const projectColumns = [
   {
@@ -182,20 +183,10 @@ const projectColumns = [
 
 function formatTime(timestamp) {
   if (timestamp) {
-    let date = new Date(timestamp);
-    let year = date.getFullYear();
-    let month = date.getMonth();
-    let day = date.getDay();
-    if (month.toString().length < 2) {
-      month = '0' + month;
-
-    }
-    if (day.toString().length < 2) {
-      day = '0' + day;
-    }
-    return `${year}-${month}-${day}`;
+    console.log(moment);
+    return moment(timestamp).format("YYYY-MM-DD");
   } else {
-    return '未定义';
+    return "未定义";
   }
 }
 
@@ -216,7 +207,7 @@ export default {
         const responseResult = successResponse.data.data;
         console.log(responseResult);
         // 填充列
-        responseResult.forEach(function (item) {
+        responseResult.forEach((item) => {
           const project = {
             projectName: item.projectName,
             projectShortId: item.projectShortId,

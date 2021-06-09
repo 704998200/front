@@ -47,7 +47,7 @@
             v-for="project in projects"
             :key="project.projectName"
             v-ripple
-            @click="getProjectIssues(project.projectId)"
+            @click="getProjectIssues(project.id)"
           >
             <q-item-section>
               <q-item-label>{{ project.projectName }}</q-item-label>
@@ -78,19 +78,23 @@
                 <q-avatar icon="folder" color="primary" text-color="white" />
               </q-item-section>
               <q-item-section>
-                <q-item-label lines="1">{{ issue.issueName }}</q-item-label>
+                <q-item-label lines="1">{{ issue.issueTitle }}</q-item-label>
+                <!--                <q-item-label caption-->
+                <!--                  >更新于:{{ issue.issueUpdateTime }}-->
+                <!--                </q-item-label>-->
+                <!--                <q-item-label caption-->
+                <!--                  >创建于:{{ issue.issueCreateTime }}-->
+                <!--                </q-item-label>  -->
                 <q-item-label caption
-                  >更新于:{{ issue.issueUpdateTime }}</q-item-label
-                >
-                <q-item-label caption
-                  >创建于:{{ issue.issueCreateTime }}</q-item-label
-                >
+                  >#{{ issue.issueId }} by {{ issue.postedBy.username }}
+                </q-item-label>
               </q-item-section>
               <q-item-section avatar>
                 <q-chip
-                  :color="issue.status === 'open' ? 'green' : 'grey'"
+                  :color="issue.status === '1' ? 'green' : 'red'"
                   icon="bookmark"
-                  >状态{{ issue.status }}
+                >
+                  <!--                  状态{{ issue.status }}-->
                 </q-chip>
               </q-item-section>
               <q-btn
@@ -148,22 +152,7 @@ export default {
     });
     return {
       newIssueBtn: ref(false),
-      issues: [
-        {
-          issueTitle: "项目管理",
-          issueContent: "1321321",
-          issueUpdateTime: "5464564564",
-          issueCreateTime: "456456456",
-          status: "open",
-        },
-        {
-          issueTitle: "项目管理",
-          issueContent: "1321321",
-          issueUpdateTime: "5464564564",
-          issueCreateTime: "456456456",
-          status: "open",
-        },
-      ],
+      issues: ref([]),
       projects,
       comments,
       creator,
@@ -184,18 +173,23 @@ export default {
       });
     },
     getProjectIssues(projectId) {
-      // console.log(projectId);
+      console.log(projectId);
       // TODO 此时可以调用 Axios
       axios
         .get(`/api/v1/project/${projectId}/getAll`)
         .then((successResponse) => {
           const responseResult = successResponse.data.data;
-          responseResult.forEach(function (item) {
-            const project = {};
-            project.projectName = item.projectName;
-            project.projectId = item.id;
-            projects.value.push(project);
-          });
+          this.issues.value = responseResult;
+          // responseResult.forEach((item) => {
+          //   const issue = {};
+          //   issue.issueId = item.id;
+          //   issue.issueTitle = item.issueTitle;
+          //   issue.issueContent = item.issueContent;
+          //   issue.issueUpdateTime = item.updatedTime;
+          //   issue.issueCreateTime = item.createdTime;
+          //   issue.postedBy = item.postedBy.username;
+          //   issues.value.push(issue);
+          // });
           console.log(projects);
         });
     },
