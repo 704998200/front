@@ -183,7 +183,7 @@ const projectColumns = [
 
 function formatTime(timestamp) {
   if (timestamp) {
-    console.log(moment);
+    // console.log(moment);
     return moment(timestamp).format("YYYY-MM-DD");
   } else {
     return "未定义";

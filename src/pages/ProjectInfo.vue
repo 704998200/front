@@ -77,7 +77,7 @@
               width: 1500px;
             "
             class="text-h4 text-black"
-          >{{ cur.projectName }}</span
+            >{{ cur.projectName }}</span
           >
           <q-btn
             size="15px"
@@ -86,7 +86,7 @@
             class="bg-secondary text-white"
           />
         </q-card-section>
-        <q-separator/>
+        <q-separator />
 
         <q-card-section>
           <span
@@ -136,14 +136,13 @@
             预计结束时间:{{ cur.projectScheduledFinishDate }}
           </span>
         </q-card-section>
-        <q-separator/>
+        <q-separator />
         <q-card-section>
           <span
             style="
               display: -moz-inline-box;
               display: inline-block;
               word-break: break-word;
-
             "
             class="text-body1 text-black"
           >
@@ -157,27 +156,17 @@
 </template>
 
 <script>
-import {onMounted, ref} from "vue";
-import {axios} from "../boot/axios";
-import {useRouter} from "vue-router";
-import {useRoute} from "vue-router";
+import { onMounted, ref } from "vue";
+import { axios } from "../boot/axios";
+import { useRouter } from "vue-router";
+import { useRoute } from "vue-router";
+import moment from "moment";
 
 function formatTime(timestamp) {
   if (timestamp) {
-    let date = new Date(timestamp);
-    let year = date.getFullYear();
-    let month = date.getMonth();
-    let day = date.getDay();
-    if (month.toString().length < 2) {
-      month = '0' + month;
-
-    }
-    if (day.toString().length < 2) {
-      day = '0' + day;
-    }
-    return `${year}-${month}-${day}`;
+    return moment(timestamp).format("YYYY-MM-DD");
   } else {
-    return '未定义';
+    return "未定义";
   }
 }
 
@@ -186,26 +175,24 @@ export default {
     const router = useRouter();
     const route = useRoute();
     let editProject = ref({
-        projectName: "",
-        projectShortId: "",
-        projectId: 0,
-        projectDescription: "",
-        projectScheduledStartDate: Date(),
-        projectScheduledFinishDate: Date(),
-      }
-    )
+      projectName: "",
+      projectShortId: "",
+      projectId: 0,
+      projectDescription: "",
+      projectScheduledStartDate: Date(),
+      projectScheduledFinishDate: Date(),
+    });
     let cur = ref({
-        projectName: "",
-        projectShortId: "",
-        projectId: 0,
-        projectDescription: "",
-        projectScheduledStartDate: Date(),
-        projectScheduledFinishDate: Date(),
-        projectCreator: "",
-        projectCreatTime: Date(),
-        projectUpdateTime: Date()
-      }
-    );
+      projectName: "",
+      projectShortId: "",
+      projectId: 0,
+      projectDescription: "",
+      projectScheduledStartDate: Date(),
+      projectScheduledFinishDate: Date(),
+      projectCreator: "",
+      projectCreatTime: Date(),
+      projectUpdateTime: Date(),
+    });
     onMounted(() => {
       axios
         .get("/api/v1/project/" + route.params.projectId + "/get")
@@ -213,16 +200,26 @@ export default {
           const responseResult = successResponse.data.data;
           console.log(responseResult);
           cur.value.projectShortId = responseResult.projectShortId;
-          editProject.value.projectShortId = cur.value.projectId = responseResult.projectId;
+          editProject.value.projectShortId = cur.value.projectId =
+            responseResult.projectId;
           cur.value.projectDescription = responseResult.projectDescription;
-          editProject.value.projectScheduledStartDate = cur.value.projectScheduledStartDate = formatTime(responseResult.startTime);
-          editProject.value.projectScheduledFinishDate = cur.value.projectScheduledFinishDate = formatTime(responseResult.finishTime);
+          editProject.value.projectScheduledStartDate =
+            cur.value.projectScheduledStartDate = formatTime(
+              responseResult.startTime
+            );
+          editProject.value.projectScheduledFinishDate =
+            cur.value.projectScheduledFinishDate = formatTime(
+              responseResult.finishTime
+            );
           cur.value.projectCreator = responseResult.postedBy.username;
           cur.value.projectCreatTime = formatTime(responseResult.createdTime);
           cur.value.projectUpdateTime = formatTime(responseResult.updatedTime);
-          editProject.value.projectName = cur.value.projectName = responseResult.projectName;
-          editProject.value.projectDescription = cur.value.projectDescription = responseResult.projectDescription;
-          editProject.value.projectId = cur.value.projectId = responseResult.projectId;
+          editProject.value.projectName = cur.value.projectName =
+            responseResult.projectName;
+          editProject.value.projectDescription = cur.value.projectDescription =
+            responseResult.projectDescription;
+          editProject.value.projectId = cur.value.projectId =
+            responseResult.projectId;
         })
         .catch((failResponse) => {
           console.log(failResponse);
@@ -240,7 +237,6 @@ export default {
     editThisProject() {
       //TODO
     },
-
   },
 };
 </script>
