@@ -9,7 +9,7 @@
           color="blue-11"
           square
           filled
-          v-model="newIssue.issueName"
+          v-model="newIssue.issueTitle"
           label="问题名称 *"
           style="margin-top: 20px"
         />
@@ -17,7 +17,7 @@
           color="blue-11"
           square
           filled
-          v-model="newIssue.issueName"
+          v-model="newIssue.assignedUser"
           label="指派人 * (不选则指派给发起人)"
           style="margin-top: 20px"
         />
@@ -31,8 +31,8 @@
           color="blue-11"
           square
           filled
-          v-model="newIssue.issueDescription"
-          label="问题详情 *"
+          v-model="newIssue.issueContent"
+          label="问题内容 *"
           style="margin-top: 20px"
         />
         <div>
@@ -76,17 +76,11 @@
       <q-page>
         <div class="q-pa-md" style="width: 100%; max-height: 50%">
           <q-list bordered separator>
-            <q-item
-              v-ripple
-              clickable
-
-              v-for="issue in issues"
-            >
+            <q-item v-ripple clickable v-for="issue in issues">
               <q-item-section avatar top>
-                <q-avatar icon="folder" color="primary" text-color="white"/>
+                <q-avatar icon="folder" color="primary" text-color="white" />
               </q-item-section>
               <q-item-section @click="openIssue(issue.issueId)">
-
                 <q-item-label lines="1">{{ issue.issueTitle }}</q-item-label>
                 <!--                <q-item-label caption-->
                 <!--                  >更新于:{{ issue.issueUpdateTime }}-->
@@ -95,16 +89,16 @@
                 <!--                  >创建于:{{ issue.issueCreateTime }}-->
                 <!--                </q-item-label>  -->
                 <q-item-label caption
-                >#{{ issue.id }} 由 {{ issue.postedBy.username }} 在
+                  >#{{ issue.id }} 由 {{ issue.postedBy.username }} 在
                   {{ calculateTime(issue.createdTime) }} 发起
                 </q-item-label>
               </q-item-section>
               <q-item-section avatar>
                 <q-chip
-                  :color="issue.status === '1' ? 'green' : 'red'"
+                  :color="issue.status === 1 ? 'green' : 'red'"
                   icon="bookmark"
                 >
-                  状态: {{ issue.status === "1" ? "打开" : "关闭" }}
+                  状态: {{ issue.status === 1 ? "打开" : "关闭" }}
                 </q-chip>
               </q-item-section>
               <q-btn
@@ -118,19 +112,15 @@
             </q-item>
           </q-list>
         </div>
-
-
       </q-page>
     </q-page-container>
   </q-layout>
 </template>
 
 <script>
-
 import { onMounted, ref } from "vue";
 import { axios } from "../boot/axios";
 import moment from "moment";
-
 
 export default {
   name: "Issues",
@@ -153,17 +143,17 @@ export default {
       newIssueBtn: ref(false),
       issues: ref([]),
       newIssue,
+      newProjectId: ref(0),
       projects,
       moment,
     };
   },
 
-
   methods: {
     addIssue(projectId) {
       console.log(projectId);
+      this.newProjectId = projectId;
       this.newIssueBtn = true;
-
     },
     getProjectIssues(projectId) {
       axios
@@ -198,6 +188,30 @@ export default {
       });
     },
     submitIssue() {
+      let projectId = this.newProjectId;
+      // console.log(projectId);
+      axios
+        .post("/api/v1/issue/new", {
+          projectId: projectId,
+          issueTitle: this.newIssue.issueTitle,
+          issueContent: this.newIssue.issueContent,
+          assignedUser: [1],
+        })
+        .then((successResponse) => {
+          const responseResult = successResponse.data.data;
+          this.issues = responseResult;
+          // responseResult.forEach((item) => {
+          //   const issue = {};
+          //   issue.issueId = item.id;
+          //   issue.issueTitle = item.issueTitle;
+          //   issue.issueContent = item.issueContent;
+          //   issue.issueUpdateTime = item.updatedTime;
+          //   issue.issueCreateTime = item.createdTime;
+          //   issue.postedBy = item.postedBy.username;
+          //   this.issues.push(item);
+          // });
+          // console.log(projects);
+        });
       //TODO
     },
     calculateTime(timestamp) {
@@ -211,7 +225,6 @@ export default {
   },
 };
 //修改模板
-
 </script>
 
 <style scoped>
