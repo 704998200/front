@@ -117,6 +117,22 @@
       </q-card>
     </div>
   </div>
+
+  <div class="comments-outside">
+    <div class="comments-header">
+      <div class="post-owner">
+        <div class="username">
+          <a href="#">@{{ creator.user }}</a>
+        </div>
+      </div>
+    </div>
+    <Comments
+      :comments_wrapper_classes="['custom-scrollbar', 'comments-wrapper']"
+      :comments="comments"
+      :current_user="current_user"
+      @submit-comment="submitComment"
+    ></Comments>
+  </div>
 </template>
 
 <script>
@@ -124,25 +140,9 @@ import {onMounted, ref} from "vue";
 import {axios} from "../boot/axios";
 import {useRouter} from "vue-router";
 import {useRoute} from "vue-router";
+import Comments from "../components/Comments.vue";
 
-function formatTime(timestamp) {
-  if (timestamp) {
-    let date = new Date(timestamp);
-    let year = date.getFullYear();
-    let month = date.getMonth();
-    let day = date.getDay();
-    if (month.toString().length < 2) {
-      month = '0' + month;
 
-    }
-    if (day.toString().length < 2) {
-      day = '0' + day;
-    }
-    return `${year}-${month}-${day}`;
-  } else {
-    return '未定义';
-  }
-}
 
 export default {
   setup() {
@@ -197,14 +197,56 @@ export default {
       editIssue,
       router,
       route,
+      comments,
+      creator,
+      current_user,
     };
   },
   methods: {
     editThisIssue() {
       //TODO
     },
+    submitComment(reply) {
+      this.comments.push({
+        id: this.comments.length + 1,
+        user: this.current_user.user,
+        avatar: this.current_user.avatar,
+        text: reply,
+      });
+    },
 
   },
+  components: {
+    Comments: Comments,
+  },
+};
+const comments = [
+  {
+    id: 1,
+    user: "example",
+    avatar: "http://via.placeholder.com/100x100/a74848",
+    text: "lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor ",
+  },
+  {
+    id: 2,
+    user: "example1",
+    avatar: "http://via.placeholder.com/100x100/2d58a7",
+    text: "lorem ipsum dolor",
+  },
+  {
+    id: 3,
+    user: "example2",
+    avatar: "http://via.placeholder.com/100x100/36846e",
+    text: "lorem ipsum dolor again",
+  },
+];
+const creator = {
+  avatar: "http://via.placeholder.com/100x100/a74848",
+  user: "exampleCreator",
+};
+const current_user = {
+  avatar: "http://via.placeholder.com/100x100/a74848",
+  user: "exampler",
 };
 </script>
 <style></style>

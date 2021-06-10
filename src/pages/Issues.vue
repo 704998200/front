@@ -65,7 +65,7 @@
               round
               flat
               color="grey"
-              @click="newIssueBtn = true"
+              @click="addIssue(project.projectId)"
               icon="playlist_add"
             ></q-btn>
           </q-item>
@@ -79,13 +79,14 @@
             <q-item
               v-ripple
               clickable
-              @click="openIssue()"
+
               v-for="issue in issues"
             >
               <q-item-section avatar top>
-                <q-avatar icon="folder" color="primary" text-color="white" />
+                <q-avatar icon="folder" color="primary" text-color="white"/>
               </q-item-section>
-              <q-item-section>
+              <q-item-section @click="openIssue(issue.issueId)">
+
                 <q-item-label lines="1">{{ issue.issueTitle }}</q-item-label>
                 <!--                <q-item-label caption-->
                 <!--                  >更新于:{{ issue.issueUpdateTime }}-->
@@ -94,7 +95,7 @@
                 <!--                  >创建于:{{ issue.issueCreateTime }}-->
                 <!--                </q-item-label>  -->
                 <q-item-label caption
-                  >#{{ issue.id }} 由 {{ issue.postedBy.username }} 在
+                >#{{ issue.id }} 由 {{ issue.postedBy.username }} 在
                   {{ calculateTime(issue.createdTime) }} 发起
                 </q-item-label>
               </q-item-section>
@@ -118,31 +119,18 @@
           </q-list>
         </div>
 
-        <div class="comments-outside">
-          <div class="comments-header">
-            <div class="post-owner">
-              <div class="username">
-                <a href="#">@{{ creator.user }}</a>
-              </div>
-            </div>
-          </div>
-          <Comments
-            :comments_wrapper_classes="['custom-scrollbar', 'comments-wrapper']"
-            :comments="comments"
-            :current_user="current_user"
-            @submit-comment="submitComment"
-          ></Comments>
-        </div>
+
       </q-page>
     </q-page-container>
   </q-layout>
 </template>
 
 <script>
-import Comments from "../components/Comments.vue";
+
 import { onMounted, ref } from "vue";
 import { axios } from "../boot/axios";
 import moment from "moment";
+
 
 export default {
   name: "Issues",
@@ -166,27 +154,18 @@ export default {
       issues: ref([]),
       newIssue,
       projects,
-      comments,
-      creator,
-      current_user,
       moment,
     };
   },
-  components: {
-    Comments: Comments,
-  },
+
 
   methods: {
-    submitComment(reply) {
-      this.comments.push({
-        id: this.comments.length + 1,
-        user: this.current_user.user,
-        avatar: this.current_user.avatar,
-        text: reply,
-      });
+    addIssue(projectId) {
+      console.log(projectId);
+      this.newIssueBtn = true;
+
     },
     getProjectIssues(projectId) {
-      // console.log(projectId);
       axios
         .get(`/api/v1/project/${projectId}/issues`)
         .then((successResponse) => {
@@ -208,13 +187,11 @@ export default {
     deleteIssue() {
       //TODO
     },
-    openIssue() {
-      //TODO
-      let projectId = props.row.projectId;
-      console.log(projectId);
+    openIssue(issueId) {
+      console.log(issueId);
       this.router.push({
         // 当你直接编码路径的时候 参数会被忽略
-        path: `/projects/${projectId}/projectInfo`,
+        path: `/issues/${issueId}/issueInfo`,
         // params: {
         //   projectId: projectId,
         // },
@@ -234,34 +211,7 @@ export default {
   },
 };
 //修改模板
-const comments = [
-  {
-    id: 1,
-    user: "example",
-    avatar: "http://via.placeholder.com/100x100/a74848",
-    text: "lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor ",
-  },
-  {
-    id: 2,
-    user: "example1",
-    avatar: "http://via.placeholder.com/100x100/2d58a7",
-    text: "lorem ipsum dolor",
-  },
-  {
-    id: 3,
-    user: "example2",
-    avatar: "http://via.placeholder.com/100x100/36846e",
-    text: "lorem ipsum dolor again",
-  },
-];
-const creator = {
-  avatar: "http://via.placeholder.com/100x100/a74848",
-  user: "exampleCreator",
-};
-const current_user = {
-  avatar: "http://via.placeholder.com/100x100/a74848",
-  user: "exampler",
-};
+
 </script>
 
 <style scoped>
