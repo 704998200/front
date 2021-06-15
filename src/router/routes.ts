@@ -31,7 +31,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import("pages/Issues.vue"),
       },
       {
-        path: "/issues/issueInfo",
+        path: "/issues/:issueId",
         component: () => import("pages/IssueInfo.vue"),
       },
     ],

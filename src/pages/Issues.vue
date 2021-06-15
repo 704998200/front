@@ -80,7 +80,7 @@
               <q-item-section avatar top>
                 <q-avatar icon="folder" color="primary" text-color="white" />
               </q-item-section>
-              <q-item-section @click="openIssue(issue.issueId)">
+              <q-item-section @click="openIssue(issue.id)">
                 <q-item-label lines="1">{{ issue.issueTitle }}</q-item-label>
                 <!--                <q-item-label caption-->
                 <!--                  >更新于:{{ issue.issueUpdateTime }}-->
@@ -106,7 +106,7 @@
                 round
                 flat
                 color="grey"
-                @click="deleteIssue()"
+                @click="deleteIssue(issue.id)"
                 icon="delete"
               ></q-btn>
             </q-item>
@@ -121,12 +121,14 @@
 import { onMounted, ref } from "vue";
 import { axios } from "../boot/axios";
 import moment from "moment";
+import { useRouter } from "vue-router";
 
 export default {
   name: "Issues",
   setup() {
     let projects = ref([]);
     let newIssue = ref({});
+    const router = useRouter();
     onMounted(() => {
       axios.get("/api/v1/project/getAll").then((successResponse) => {
         const responseResult = successResponse.data.data;
@@ -146,6 +148,7 @@ export default {
       newProjectId: ref(0),
       projects,
       moment,
+      router,
     };
   },
 
@@ -174,14 +177,19 @@ export default {
           // console.log(projects);
         });
     },
-    deleteIssue() {
+    deleteIssue(issueId) {
       //TODO
+      axios
+        .delete(`/api/v1/issue/${issueId}/delete/`)
+        .then((successResponse) => {
+          this.router.push({});
+        });
     },
     openIssue(issueId) {
       console.log(issueId);
       this.router.push({
         // 当你直接编码路径的时候 参数会被忽略
-        path: `/issues/${issueId}/issueInfo`,
+        path: `/issues/${issueId}`,
         // params: {
         //   projectId: projectId,
         // },
@@ -195,7 +203,7 @@ export default {
           projectId: projectId,
           issueTitle: this.newIssue.issueTitle,
           issueContent: this.newIssue.issueContent,
-          assignedUser: [1],
+          assignedUser: [],
         })
         .then((successResponse) => {
           const responseResult = successResponse.data.data;
@@ -212,7 +220,8 @@ export default {
           // });
           // console.log(projects);
         });
-      //TODO
+      this.newIssueBtn = false;
+      this.router.push({});
     },
     calculateTime(timestamp) {
       moment.locale("zh-CN");
