@@ -1,5 +1,5 @@
 <template>
-  <q-dialog v-model="editi">
+  <q-dialog v-model="updateIssueBtn">
     <q-card style="width: 600px; height: 800px">
       <q-card-section>
         <div class="text-h6 text-center">修改项目</div>
@@ -15,8 +15,8 @@
         />
         <div>状态:</div>
         <div class="q-gutter-sm">
-          <q-radio v-model="editIssue.status" val="open" label="open"/>
-          <q-radio v-model="editIssue.status" val="close" label="close"/>
+          <q-radio v-model="editIssue.status" val="open" label="open" />
+          <q-radio v-model="editIssue.status" val="close" label="close" />
         </div>
         <q-input
           type="textarea"
@@ -56,16 +56,16 @@
               width: 1500px;
             "
             class="text-h4 text-black"
-          >{{ }}</span
+            >{{ currentIssue.issueTitle }}</span
           >
           <q-btn
             size="15px"
             label="修改"
-            @click="editi = true"
+            @click="updateIssueBtn = true"
             class="bg-secondary text-white"
           />
         </q-card-section>
-        <q-separator/>
+        <q-separator />
 
         <q-card-section>
           <span
@@ -76,11 +76,11 @@
             "
             class="text-body1 text-black"
           >
-           上传人:{{  }}
+            创建By:{{ currentIssue.username }}
           </span>
 
           <span class="text-body1 text-black">
-            状态:{{}}
+            状态:{{ currentIssue.status === 1 ? "打开" : "关闭" }}
           </span>
         </q-card-section>
         <q-card-section>
@@ -92,26 +92,24 @@
             "
             class="text-body1 text-black"
           >
-            创建时间:{{  }}
+            创建时间:{{ formatTime(currentIssue.createdTime) }}
           </span>
 
           <span class="text-body1 text-black">
-            更新时间:{{ }}
+            更新时间:{{ formatTime(currentIssue.updatedTime) }}
           </span>
         </q-card-section>
-        <q-separator/>
+        <q-separator />
         <q-card-section>
           <span
             style="
               display: -moz-inline-box;
               display: inline-block;
               word-break: break-word;
-
             "
             class="text-body1 text-black"
           >
-            任务内容:
-            {{ }}
+            任务内容: {{ currentIssue.issueContent }}
           </span>
         </q-card-section>
       </q-card>
@@ -136,64 +134,47 @@
 </template>
 
 <script>
-import {onMounted, ref} from "vue";
-import {axios} from "../boot/axios";
-import {useRouter} from "vue-router";
-import {useRoute} from "vue-router";
+import { onMounted, ref } from "vue";
+import { axios } from "../boot/axios";
+import { useRoute, useRouter } from "vue-router";
 import Comments from "../components/Comments.vue";
-
-
+import moment from "moment";
 
 export default {
   setup() {
     const router = useRouter();
     const route = useRoute();
-
+    let currentIssue = ref({
+      username: "123",
+      createdTime: "",
+      updatedTime: "",
+      issueTitle: "",
+      issueContent: "",
+      status: 0,
+    });
     let editIssue = ref({
-        issueName: "",
-        issueDescription: "",
-        issueCreateDate: Date(),
-        issueUpdateDate: Date(),
-      }
-    )
-    // let cur = ref({
-    //     projectName: "",
-    //     projectShortId: "",
-    //     projectId: 0,
-    //     projectDescription: "",
-    //     projectScheduledStartDate: Date(),
-    //     projectScheduledFinishDate: Date(),
-    //     projectCreator: "",
-    //     projectCreatTime: Date(),
-    //     projectUpdateTime: Date()
-    //   }
-    // );
-    // onMounted(() => {
-    //   axios
-    //     .get("/api/v1/project/" + route.params.projectId + "/get")
-    //     .then((successResponse) => {
-    //       const responseResult = successResponse.data.data;
-    //       console.log(responseResult);
-    //       cur.value.projectShortId = responseResult.projectShortId;
-    //       editIssue.value.projectShortId = cur.value.projectId = responseResult.projectId;
-    //       cur.value.projectDescription = responseResult.projectDescription;
-    //       editIssue.value.projectScheduledStartDate = cur.value.projectScheduledStartDate = formatTime(responseResult.startTime);
-    //       editIssue.value.projectScheduledFinishDate = cur.value.projectScheduledFinishDate = formatTime(responseResult.finishTime);
-    //       cur.value.projectCreator = responseResult.postedBy.username;
-    //       cur.value.projectCreatTime = formatTime(responseResult.createdTime);
-    //       cur.value.projectUpdateTime = formatTime(responseResult.updatedTime);
-    //       editIssue.value.projectName = cur.value.projectName = responseResult.projectName;
-    //       editIssue.value.projectDescription = cur.value.projectDescription = responseResult.projectDescription;
-    //       editIssue.value.projectId = cur.value.projectId = responseResult.projectId;
-    //     })
-    //     .catch((failResponse) => {
-    //       console.log(failResponse);
-    //     });
-    // });
+      issueName: "",
+      issueDescription: "",
+      issueCreateDate: Date(),
+      issueUpdateDate: Date(),
+    });
+    onMounted(() => {
+      let issueId = route.params.issueId;
+      axios.get(`/api/v1/issue/${issueId}/get`).then((successResponse) => {
+        const responseResult = successResponse.data.data;
+        console.log(responseResult);
+        // console.log(responseResult.postedBy.username);
+        currentIssue.value.username = responseResult.postedBy.username;
+        currentIssue.value.createdTime = responseResult.createdTime;
+        currentIssue.value.updatedTime = responseResult.updatedTime;
+        currentIssue.value.issueTitle = responseResult.issueTitle;
+        currentIssue.value.issueContent = responseResult.issueContent;
+        currentIssue.value.status = responseResult.status;
+      });
+    });
     return {
-      shape: ref(''),
-      editi: ref(false),
-      // cur,
+      updateIssueBtn: ref(false),
+      currentIssue,
       editIssue,
       router,
       route,
@@ -214,7 +195,14 @@ export default {
         text: reply,
       });
     },
-
+    formatTime(timestamp) {
+      if (timestamp) {
+        // console.log(moment);
+        return moment(timestamp).format("YYYY-MM-DD");
+      } else {
+        return "未定义";
+      }
+    },
   },
   components: {
     Comments: Comments,

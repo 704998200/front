@@ -12,18 +12,18 @@
     "mock-dev": "BASE_API=/api/v1 quasar dev"
   },
   "dependencies": {
-    "@quasar/extras": "^1.0.0",
+    "@quasar/extras": "^1.10.7",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "mockjs": "^1.1.0",
     "moment": "^2.29.1",
-    "quasar": "^2.0.0-beta.1",
+    "quasar": "^2.0.0-rc.2",
     "vue-i18n": "^9.0.0-beta.0",
     "vuex": "4",
     "vuex-persistedstate": "^4.0.0-beta.3"
   },
   "devDependencies": {
-    "@quasar/app": "^3.0.0-beta.1",
+    "@quasar/app": "^3.0.0-rc.2",
     "@types/js-md5": "^0.4.2",
     "@types/node": "^10.17.15",
     "@typescript-eslint/eslint-plugin": "^4.16.1",

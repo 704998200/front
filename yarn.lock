@@ -1059,10 +1059,10 @@
   resolved "https://registry.npm.taobao.org/@positron/stack-trace/download/@positron/stack-trace-1.0.0.tgz#14fcc712a530038ef9be1ce6952315a839f466a8"
   integrity sha1-FPzHEqUwA475vhzmlSMVqDn0Zqg=
 
-"@quasar/app@^3.0.0-beta.1":
-  version "3.0.0-rc.1"
-  resolved "https://registry.nlark.com/@quasar/app/download/@quasar/app-3.0.0-rc.1.tgz#694b4781e26315b9c42a8d47c75306d2ac1ac2c4"
-  integrity sha1-aUtHgeJjFbnEKo1Hx1MG0qwawsQ=
+"@quasar/app@^3.0.0-rc.2":
+  version "3.0.0-rc.2"
+  resolved "https://registry.nlark.com/@quasar/app/download/@quasar/app-3.0.0-rc.2.tgz#710724ff5e4d52520caf2545c3f68d8227168442"
+  integrity sha1-cQck/15NUlIMryVFw/aNgicWhEI=
   dependencies:
     "@quasar/babel-preset-app" "2.0.1"
     "@quasar/fastclick" "1.1.4"
@@ -1163,10 +1163,10 @@
     core-js "^3.6.5"
     core-js-compat "^3.6.5"
 
-"@quasar/extras@^1.0.0":
-  version "1.10.6"
-  resolved "https://registry.nlark.com/@quasar/extras/download/@quasar/extras-1.10.6.tgz#9d7a609bc941d1ec40ba42718b6b39631baf982f"
-  integrity sha1-nXpgm8lB0exAukJxi2s5YxuvmC8=
+"@quasar/extras@^1.10.7":
+  version "1.10.7"
+  resolved "https://registry.nlark.com/@quasar/extras/download/@quasar/extras-1.10.7.tgz#ecd09cd3b1251dea260c54dcc5a965dcc1abc1e2"
+  integrity sha1-7NCc07ElHeomDFTcxall3MGrweI=
 
 "@quasar/fastclick@1.1.4":
   version "1.1.4"
@@ -5717,10 +5717,10 @@ qs@6.7.0:
   resolved "https://registry.nlark.com/qs/download/qs-6.7.0.tgz#41dc1a015e3d581f1621776be31afb2876a9b1bc"
   integrity sha1-QdwaAV49WB8WIXdr4xr7KHapsbw=
 
-quasar@^2.0.0-beta.1:
-  version "2.0.0-rc.1"
-  resolved "https://registry.nlark.com/quasar/download/quasar-2.0.0-rc.1.tgz#c047f0cc5ea7f803ec06b7f0830c7ed1b8fe315d"
-  integrity sha1-wEfwzF6n+APsBrfwgwx+0bj+MV0=
+quasar@^2.0.0-rc.2:
+  version "2.0.0-rc.2"
+  resolved "https://registry.nlark.com/quasar/download/quasar-2.0.0-rc.2.tgz#df7695526ce4a556abcbe1cc7abe66ec56af1ef3"
+  integrity sha1-33aVUmzkpVary+HMer5m7FavHvM=
 
 querystring@0.2.0:
   version "0.2.0"
