@@ -12,18 +12,16 @@
             round
             @click="leftDrawerOpen = !leftDrawerOpen"
           />
-
           <q-toolbar-title
             v-if="$q.screen.gt.xs"
             class="row items-center no-wrap"
             shrink
+            clickable="true"
+            @click="router.push({ path: '/' })"
           >
-            <span>项目管理追踪系统</span>
-            <!--          <span>{{ tokenState }}</span>-->
+            <span> 项目管理追踪系统</span>
           </q-toolbar-title>
-
           <q-space />
-
           <q-btn-group rounded style="left: 100%">
             <q-btn>
               <q-avatar size="30px">
