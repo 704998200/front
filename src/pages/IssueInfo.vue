@@ -117,17 +117,16 @@
   </div>
 
   <div class="comments-outside">
-    <div class="comments-header">
-      <div class="post-owner">
-        <div class="username">
-          <a href="#">@{{ creator.user }}</a>
-        </div>
-      </div>
-    </div>
+    <!--    <div class="comments-header">-->
+    <!--      <div class="post-owner">-->
+    <!--        <div class="username">-->
+    <!--          <a href="#">@{{ creator.user }}</a>-->
+    <!--        </div>-->
+    <!--      </div>-->
+    <!--    </div>-->
     <Comments
       :comments_wrapper_classes="['custom-scrollbar', 'comments-wrapper']"
       :comments="comments"
-      :current_user="current_user"
       @submit-comment="submitComment"
     ></Comments>
   </div>
@@ -144,8 +143,9 @@ export default {
   setup() {
     const router = useRouter();
     const route = useRoute();
+    let comments = ref([]);
     let currentIssue = ref({
-      username: "123",
+      username: "",
       createdTime: "",
       updatedTime: "",
       issueTitle: "",
@@ -160,6 +160,7 @@ export default {
     });
     onMounted(() => {
       let issueId = route.params.issueId;
+      // 拉取 issue 的内容
       axios.get(`/api/v1/issue/${issueId}/get`).then((successResponse) => {
         const responseResult = successResponse.data.data;
         console.log(responseResult);
@@ -171,6 +172,23 @@ export default {
         currentIssue.value.issueContent = responseResult.issueContent;
         currentIssue.value.status = responseResult.status;
       });
+      // 拉取 comment 内容
+      axios.get(`/api/v1/issue/${issueId}/comments`).then((successResponse) => {
+        // 注意在这个请求中,这里已经是数组
+        const responseResult = successResponse.data.data;
+        console.log(responseResult);
+        responseResult.forEach((rawComment) => {
+          let comment = {
+            id: rawComment.id,
+            user: rawComment.postedBy.username,
+            email: rawComment.postedBy.email,
+            commentContent: rawComment.commentContent,
+            createdTime: rawComment.createdTime,
+            updatedTime: rawComment.updatedTime,
+          };
+          comments.value.push(comment);
+        });
+      });
     });
     return {
       updateIssueBtn: ref(false),
@@ -179,8 +197,6 @@ export default {
       router,
       route,
       comments,
-      creator,
-      current_user,
     };
   },
   methods: {
@@ -190,8 +206,7 @@ export default {
     submitComment(reply) {
       this.comments.push({
         id: this.comments.length + 1,
-        user: this.current_user.user,
-        avatar: this.current_user.avatar,
+
         text: reply,
       });
     },
@@ -207,34 +222,6 @@ export default {
   components: {
     Comments: Comments,
   },
-};
-const comments = [
-  {
-    id: 1,
-    user: "example",
-    avatar: "http://via.placeholder.com/100x100/a74848",
-    text: "lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor lorem ipsum dolor ",
-  },
-  {
-    id: 2,
-    user: "example1",
-    avatar: "http://via.placeholder.com/100x100/2d58a7",
-    text: "lorem ipsum dolor",
-  },
-  {
-    id: 3,
-    user: "example2",
-    avatar: "http://via.placeholder.com/100x100/36846e",
-    text: "lorem ipsum dolor again",
-  },
-];
-const creator = {
-  avatar: "http://via.placeholder.com/100x100/a74848",
-  user: "exampleCreator",
-};
-const current_user = {
-  avatar: "http://via.placeholder.com/100x100/a74848",
-  user: "exampler",
 };
 </script>
 <style></style>

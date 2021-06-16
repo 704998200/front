@@ -1,14 +1,27 @@
 <template>
   <div class="comment">
     <div class="text">
+      <q-avatar size="30px">
+        <img
+          :src="`https://www.gravatar.com/avatar/${md5(
+            comment.email
+          )}?s=128&d=mm&r=g`"
+        />
+      </q-avatar>
       <a class="username" href="#">@{{ comment.user }}</a>
-      <span>{{ comment.text }}</span>
+      <span>{{ comment.commentContent }}</span>
     </div>
   </div>
 </template>
 
 <script>
+const md5 = require("js-md5");
 export default {
+  setup() {
+    return {
+      md5,
+    };
+  },
   name: "singleComment",
   props: ["comment"],
 };
