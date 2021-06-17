@@ -192,6 +192,7 @@ export default {
     });
     return {
       updateIssueBtn: ref(false),
+      reply: ref(""),
       currentIssue,
       editIssue,
       router,
@@ -204,11 +205,19 @@ export default {
       //TODO
     },
     submitComment(reply) {
-      this.comments.push({
-        id: this.comments.length + 1,
-
-        text: reply,
-      });
+      let issueId = this.route.params.issueId;
+      console.log(issueId);
+      console.log(reply);
+      // 此处发起Axios
+      axios
+        .post("/api/v1/comment/new", {
+          commentContent: reply,
+          issueId: issueId,
+        })
+        .then(() => {
+          console.log("现在刷新页面");
+          this.router.go(0);
+        });
     },
     formatTime(timestamp) {
       if (timestamp) {

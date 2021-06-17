@@ -182,7 +182,7 @@ export default {
       axios
         .delete(`/api/v1/issue/${issueId}/delete/`)
         .then((successResponse) => {
-          this.router.push({});
+          this.router.go(0);
         });
     },
     openIssue(issueId) {
@@ -221,7 +221,7 @@ export default {
           // console.log(projects);
         });
       this.newIssueBtn = false;
-      this.router.push({});
+      this.router.go(0);
     },
     calculateTime(timestamp) {
       moment.locale("zh-CN");

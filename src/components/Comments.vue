@@ -16,9 +16,9 @@
         placeholder="Leave a comment..."
         maxlength="250"
         required
-        @keyup.enter="submitComment"
+        @keyup.enter="submitComment()"
       />
-      <button class="reply--button" @click.prevent="submitComment">
+      <button class="reply--button" @click.prevent="submitComment()">
         <i class="fa fa-paper-plane"></i> Send
       </button>
     </div>
@@ -27,23 +27,30 @@
 
 <script>
 import singleComment from "./SingleComment";
+import { ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
 export default {
   name: "comments",
   components: {
     "single-comment": singleComment,
   },
-  data() {
+  setup() {
+    const router = useRouter();
+    const route = useRoute();
     return {
-      reply: "",
+      reply: ref(""),
+      route,
     };
   },
   methods: {
     submitComment() {
-      if (this.reply != "") {
-        this.$emit("submit-comment", this.reply);
-        this.reply = "";
+      if (this.reply == "") {
+        return null;
       }
+      console.log("触发于组件" + this.reply);
+      this.$emit("submit-comment", this.reply);
+      this.reply = "";
     },
   },
   props: ["comments", "current_user", "comments_wrapper_classes"],

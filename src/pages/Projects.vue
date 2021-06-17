@@ -246,7 +246,7 @@ export default {
           // 成功以后可以关闭消息窗口的
           this.newProjectBtn = false;
           // 跳转回本页
-          this.router.push({});
+          this.router.go(0);
         })
         .catch((failResponse) => {
           console.log(failResponse);
