@@ -101,28 +101,6 @@
       </template>
     </q-table>
   </div>
-  <div>
-    <!--    <q-card class="my-card" style="margin-left: 1%; width: 98%">-->
-    <!--      <q-parallax-->
-    <!--        :speed="1"-->
-    <!--        src="https://cdn.quasar.dev/img/parallax1.jpg"-->
-    <!--        :height="250"-->
-    <!--      >-->
-    <!--      </q-parallax>-->
-    <!--      <q-card-section>-->
-    <!--        <div class="text-h4 text-black">{{ curProjectName }}</div>-->
-    <!--      </q-card-section>-->
-    <!--      <q-separator />-->
-    <!--      <q-card-actions>-->
-    <!--        <div-->
-    <!--          style="width: 100%; word-wrap: break-word"-->
-    <!--          class="text-body1 text-black"-->
-    <!--        >-->
-    <!--          {{ curProjectDescription }}-->
-    <!--        </div>-->
-    <!--      </q-card-actions>-->
-    <!--    </q-card>-->
-  </div>
 </template>
 
 <script>

@@ -145,12 +145,17 @@ export default {
       leftDrawerOpen: ref(true),
       links: [
         {
+          icon: "account_circle",
+          text: "个人首页",
+          target: "/"
+        },
+        {
           icon: "web",
           text: "项目管理",
           target: "/projects"
         },
         {
-          icon: "person",
+          icon: "bug_report",
           text: "问题追踪",
           target: "/issues"
         }
