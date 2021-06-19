@@ -102,19 +102,6 @@ const issueCols = [
   { name: "title", align: "center", label: "Issue标题", field: "issueTitle" },
   { name: "action", align: "center", label: "操作" },
 ];
-// 定义两种不同的类型
-const assignToMeRows = [
-  {
-    issueTitle: "FY2",
-    id: 159,
-  },
-];
-const openByMeRows = [
-  {
-    issueTitle: "FY3",
-    id: 114,
-  },
-];
 export default defineComponent({
   name: "index",
   components: {
@@ -157,6 +144,8 @@ export default defineComponent({
         },
       ],
     });
+    let assignToMeRows = ref([]);
+    let openByMeRows = ref([]);
     onMounted(() => {
       // 拿绘图用的数据
       axios.get("/api/v1/dashboard/counts").then((successResponse) => {
@@ -173,6 +162,27 @@ export default defineComponent({
         });
       });
       // 拿分配给我的
+      axios.get("/api/v1/dashboard/assigned").then((successResponse) => {
+        const responseResult = successResponse.data.data;
+        responseResult.forEach((issue) => {
+          let row = {
+            issueTitle: issue.title,
+            id: issue.id,
+          };
+          assignToMeRows.value.push(row);
+        });
+      });
+      // 拿我打开的
+      axios.get("/api/v1/dashboard/opened").then((successResponse) => {
+        const responseResult = successResponse.data.data;
+        responseResult.forEach((issue) => {
+          let row = {
+            issueTitle: issue.title,
+            id: issue.id,
+          };
+          openByMeRows.value.push(row);
+        });
+      });
     });
     return {
       chartData,
