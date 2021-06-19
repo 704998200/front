@@ -12,34 +12,21 @@
         narrow-indicator
         title=""
       >
-        <q-tab name="myProjects" label="我的项目"/>
-        <q-tab name="myIssues" label="我的问题"/>
+        <q-tab name="openByMe" label="我打开的" />
+        <q-tab name="assignToMe" label="分配给我的" />
       </q-tabs>
 
-      <q-separator/>
+      <q-separator />
 
       <q-tab-panels v-model="tab" animated>
-        <q-tab-panel name="myProjects">
-          <q-table :rows="projectRows" :columns="myProjectsColumns" row-key="name" flat>
-            <template v-slot:body-cell-projectInfo="props">
-              <q-td :props="props">
-                <q-btn
-                  dense
-                  round
-                  flat
-                  color="grey"
-                  @click="openProject(props)"
-                  icon="arrow_forward"
-                ></q-btn>
-              </q-td>
-            </template>
-          </q-table>
-        </q-tab-panel>
-
-        <q-tab-panel name="myIssues">
-          <q-table :rows="issueRows" :columns="myIssuesColumns" row-key="name" flat>
-
-            <template v-slot:body-cell-issueInfo="props">
+        <q-tab-panel name="openByMe">
+          <q-table
+            :rows="openByMeRows"
+            :columns="issueCols"
+            row-key="name"
+            flat
+          >
+            <template v-slot:body-cell-action="props">
               <q-td :props="props">
                 <q-btn
                   dense
@@ -51,135 +38,153 @@
                 ></q-btn>
               </q-td>
             </template>
-
+          </q-table>
+        </q-tab-panel>
+        <q-tab-panel name="assignToMe">
+          <q-table
+            :rows="assignToMeRows"
+            :columns="issueCols"
+            row-key="name"
+            flat
+          >
+            <template v-slot:body-cell-action="props">
+              <q-td :props="props">
+                <q-btn
+                  dense
+                  round
+                  flat
+                  color="grey"
+                  @click="openIssue(props)"
+                  icon="arrow_forward"
+                ></q-btn>
+              </q-td>
+            </template>
           </q-table>
         </q-tab-panel>
       </q-tab-panels>
     </q-card>
-
-
+    <q-card name="chart" style="width: 50%">
+      <v-chart class="chart" :option="chartData" />
+    </q-card>
   </div>
-  <v-chart class="chart" :option="option"/>
 </template>
 
 <script>
-import {use} from "echarts/core";
-import {CanvasRenderer} from "echarts/renderers";
-import {PieChart} from "echarts/charts";
+import { use } from "echarts/core";
+import { CanvasRenderer } from "echarts/renderers";
+import { PieChart } from "echarts/charts";
 import {
+  LegendComponent,
   TitleComponent,
   TooltipComponent,
-  LegendComponent
 } from "echarts/components";
-import VChart, {THEME_KEY} from "vue-echarts";
-import {ref, defineComponent} from "vue";
+import VChart, { THEME_KEY } from "vue-echarts";
+import { defineComponent, onMounted, ref } from "vue";
+import { axios } from "../boot/axios";
 
 use([
   CanvasRenderer,
   PieChart,
   TitleComponent,
   TooltipComponent,
-  LegendComponent
+  LegendComponent,
 ]);
-const myProjectsColumns = [
+// 这里定义了列信息
+const issueCols = [
   {
     name: "id",
     required: true,
     label: "id",
     align: "center",
-    field: (row) => row.projectId,
+    field: "id",
     sortable: true,
   },
-  {name: "name", align: "center", label: "项目名称", field: "projectName"},
-  {name: "projectInfo", align: "center", label: "操作"},
+  { name: "title", align: "center", label: "Issue标题", field: "issueTitle" },
+  { name: "action", align: "center", label: "操作" },
 ];
-const myIssuesColumns = [
+// 定义两种不同的类型
+const assignToMeRows = [
   {
-    name: "id",
-    required: true,
-    label: "id",
-    align: "center",
-    field: (row) => row.issueId,
-    sortable: true,
+    issueTitle: "FY2",
+    id: 159,
   },
-  {name: "name", align: "center", label: " 问题名称", field: "issueName"},
-  {name: "status", align: "center", label: " 状态", field: "issueStatus"},
-  {name: "issueInfo", align: "center", label: "操作"},
 ];
-const issueRows = [
+const openByMeRows = [
   {
-    issueName: 'Frozen Yogurt',
-    issueId: 159,
-    issueStatus: "开启"
-  }];
-const projectRows = [
-  {
-    projectName: 'Frozen Yogurt',
-    projectId: 159,
-  }];
+    issueTitle: "FY3",
+    id: 114,
+  },
+];
 export default defineComponent({
   name: "index",
   components: {
-    VChart
+    VChart,
   },
   provide: {
-    [THEME_KEY]: "light"
+    [THEME_KEY]: "light",
   },
   setup() {
-
-    const option = ref({
+    const chartData = ref({
       title: {
-        text: "Traffic Sources",
-        left: "center"
+        text: "问题状态",
+        left: "center",
       },
       tooltip: {
         trigger: "item",
-        formatter: "{a} <br/>{b} : {c} ({d}%)"
+        formatter: "{a} <br/>{b} : {c} ({d}%)",
       },
       legend: {
         orient: "vertical",
         left: "left",
-        data: ["Direct", "Email", "Ad Networks", "Video Ads", "Search Engines"]
+        data: ["已开启", "已关闭"],
       },
       series: [
         {
-          name: "Traffic Sources",
+          name: "问题状态",
           type: "pie",
           radius: "55%",
           center: ["50%", "60%"],
           data: [
-            {value: 335, name: "Direct"},
-            {value: 310, name: "Email"},
-            {value: 234, name: "Ad Networks"},
-            {value: 135, name: "Video Ads"},
-            {value: 1548, name: "Search Engines"}
+            // { value: 335, name: "Direct" },
           ],
           emphasis: {
             itemStyle: {
               shadowBlur: 10,
               shadowOffsetX: 0,
-              shadowColor: "rgba(255, 255,255,1)"
-            }
-          }
-        }
-      ]
+              shadowColor: "rgba(255, 255,255,1)",
+            },
+          },
+        },
+      ],
     });
-
+    onMounted(() => {
+      // 拿绘图用的数据
+      axios.get("/api/v1/dashboard/counts").then((successResponse) => {
+        const responseResult = successResponse.data.data;
+        let openedIssueCount = responseResult.openedIssue;
+        let closedIssueCount = responseResult.closedIssue;
+        chartData.value.series[0].data.push({
+          value: openedIssueCount,
+          name: "已开启",
+        });
+        chartData.value.series[0].data.push({
+          value: closedIssueCount,
+          name: "已关闭",
+        });
+      });
+      // 拿分配给我的
+    });
     return {
-      option,
-      tab: ref('myProjects'),
-      myProjectsColumns,
-      myIssuesColumns,
-      issueRows,
-      projectRows
+      chartData,
+      tab: ref("openByMe"),
+      issueCols,
+      assignToMeRows,
+      openByMeRows,
     };
   },
   methods: {
     openIssue(props) {
-      //TODO
-    },
-    openProject(props) {
-      //TODO
+      // TODO
     },
   },
 });
